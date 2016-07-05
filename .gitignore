@@ -1,11 +1,7 @@
-
 .gitignore
 .gradle/
 .idea/
-Flix.iml
-build.gradle
 build/
 gradle/
 gradlew
 gradlew.bat
-src/
