@@ -18,8 +18,8 @@ apply plugin: 'eclipse'
 apply plugin: 'spring-boot' 
 
 jar {
-	baseName = 'demo'
-	version = '0.0.1-SNAPSHOT'
+	baseName = 'flix'
+	version = '0'
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -35,6 +35,9 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-ws')
 	compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.3'
+	compile group: 'commons-io', name: 'commons-io', version: '2.5'
+	compile group: 'com.google.guava', name: 'guava', version: '19.0'
+
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

@@ -14,7 +14,7 @@ import java.util.Set;
  * Created by bangae1 on 2016-06-13.
  */
 @Entity
-@Table(name = "users", schema = "bangae1")
+@Table(name = "users", schema = "dev")
 public class UsersEntity implements UserDetails {
     private String id;
     private String password;

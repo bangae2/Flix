@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by bangae11 on 2016-06-19.
  */
 @Entity
-@Table(schema = "bangae1", name = "videos")
+@Table(schema = "dev", name = "videos")
 public class VideosEntity {
     private int video_seq;
     private int video_kind_seq;
@@ -20,7 +20,6 @@ public class VideosEntity {
     private String file_name;
     private String file_path;
     private String thumbnail;
-    private VideoKindEntity videoKindEntity;
 
     public VideosEntity() {
     }
@@ -109,16 +108,6 @@ public class VideosEntity {
         this.reg_date = reg_date;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "video_kind_seq", insertable = false, updatable = false)
-    public VideoKindEntity getVideoKindEntity() {
-        return videoKindEntity;
-    }
-
-    public void setVideoKindEntity(VideoKindEntity videoKindEntity) {
-        this.videoKindEntity = videoKindEntity;
-    }
-
     @Override
     public String toString() {
         return "VideosEntity{" +
@@ -130,7 +119,6 @@ public class VideosEntity {
                 ", file_name='" + file_name + '\'' +
                 ", file_path='" + file_path + '\'' +
                 ", thumbnail='" + thumbnail + '\'' +
-                ", videoKindEntity=" + videoKindEntity +
                 '}';
     }
 }

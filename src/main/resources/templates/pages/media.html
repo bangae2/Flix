@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorator="index">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Webflix - Streaming Media Theme - Homepage v2</title>
+    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="assets/img/x-icon"/>
+    <link rel="apple-touch-icon-precomposed" th:href="@{/img/apple-touch-icon.png}"/>
+
+    <!--     Include UIKit CSS   -->
+    <link rel="stylesheet" th:href="@{/css/uikit.min.css}"/>
+
+    <!--     Theme CSS   -->
+    <link rel="stylesheet" th:href="@{/css/theme.css}"/>
+    <link rel="stylesheet" th:href="@{/css/font-awesome.css}"/>
+    <style>
+        .video-fade {
+            opacity: 0.1;
+        }
+
+        .video-play {
+            position: absolute;
+            top: 0px;
+            width: inherit;
+            height: 300px;
+            line-height: 300px;
+            text-align: center;
+            display: inherit;
+        }
+
+        @media (min-width:0px) {
+            .video-play {
+                margin-left: 0px;
+                font-size: 150px;
+            }
+        }
+        @media (min-width:760px) {
+            .video-play {
+                margin-left: 0px;
+                font-size: 120px;
+            }
+        }
+
+        @media (min-width: 1220px) {
+            .video-play {
+                margin-left: -17.5px;
+                font-size: 100px;
+            }
+        }
+
+        .fa-th-list {
+            font-size: 2em;
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            cursor: pointer;
+            z-index:5000;
+        }
+
+        .play-list-menu {
+            position: fixed;
+            right: 0px;
+            width: 300px;
+            height: 100%;
+            top: 0px;
+            padding-top: 20px;
+            background-color: black;
+            z-index:4000;
+        }
+
+        .play-list-content {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top:0px;
+            z-index:4000;
+        }
+
+        .play-list-fade {
+            width:100%;
+            height:100%;
+            top:0px;
+            display: none;
+            position: fixed;
+            z-index:3000;
+        }
+    </style>
+
+</head>
+<body layout:fragment="content">
+
+<!-- start Main Content (Media Page Section) -->
+
+<div id="tm-media-section" class="uk-block uk-block-small">
+
+    <div class="uk-container uk-container-center uk-width-8-10">
+        <div class="media-container  uk-container-center">
+            <!--<a class="uk-button uk-button-large uk-button-link uk-text-muted" href="index.html"><i class=" uk-icon-arrow-left uk-margin-small-right"></i> Back</a>-->
+        </div>
+
+        <div class="uk-grid">
+            <div class="uk-width-medium-3-10">
+                <div  class="media-cover">
+                    <img th:src="@{'/viewer/image/'+ ${video.video_seq}}" alt="Image" class="uk-scrollspy-inview uk-animation-fade" style="width: 400px;height: 445px;"/>
+                </div>
+                <a id="watchMeBtn" class="uk-button uk-button-primary uk-button-large uk-width-1-1 uk-margin-top"  th:attr="data-video-seq=${video.video_seq}"><i class="uk-icon-television uk-margin-small-right"></i> Watch Now</a>
+                <a class="uk-button uk-button-link uk-text-muted uk-button-large uk-width-1-1 uk-margin-top" href="login.html"><i class="uk-icon-heart uk-margin-small-right"></i> Add to Favourites</a>
+            </div>
+            <div class="uk-width-medium-7-10">
+                <div class="">
+                    <ul class="uk-tab uk-tab-grid " data-uk-switcher="{connect:'#media-tabs'}">
+                        <li class="uk-width-medium-1-3 uk-active"><a href="#">영화정보</a></li>
+                        <li class="uk-width-medium-1-3"><a href="#">리뷰</a></li>
+                        <li class="uk-width-medium-1-3"><a href="#">트레일러</a></li>
+                        <li class="uk-tab-responsive uk-active uk-hidden" aria-haspopup="true" aria-expanded="false"><a>Active</a><div class="uk-dropdown uk-dropdown-small uk-dropdown-up"><ul class="uk-nav uk-nav-dropdown"></ul><div></div></div></li></ul>
+                </div>
+
+                <ul id="media-tabs" class="uk-switcher">
+
+                    <!--     start Tab Panel 1 (Reviews Sections) -->
+
+                    <li>
+                        <h2 class="uk-text-contrast uk-margin-large-top" th:text="${video.title3}"><span class="rating uk-margin-small-left uk-h4 uk-text-warning">
+                                                <i class="uk-icon-star "></i>
+                                                <i class="uk-icon-star"></i>
+                                                <i class="uk-icon-star"></i>
+                                                <i class="uk-icon-star"></i>
+                                                <i class="uk-icon-star"></i>
+                                            </span></h2>
+                        <ul class="uk-subnav uk-subnav-line">
+                            <li><i class="uk-icon-star uk-margin-small-right"></i><span th:utext="${videoKind.star}"></span> </li>
+                            <li><i class="uk-icon-clock-o uk-margin-small-right"></i> 108 Mins</li>
+                            <li th:text="${videoKind.start_date}"></li>
+                        </ul>
+                        <hr/>
+                        <p class="uk-text-muted uk-h4" th:text="${video.story}"></p>
+                        <dl class="uk-description-list-horizontal uk-margin-top">
+                            <dt>배우</dt>
+                            <dd><ul class="uk-subnav ">
+                                <li th:text="${videoKind.actor}"></li>
+                            </ul></dd>
+                            <dt>장르</dt>
+                            <dd><ul class="uk-subnav ">
+                                <li th:text="${videoKind.genre}"></li>
+                            </ul></dd>
+                            <dt>국가</dt>
+                            <dd><ul class="uk-subnav ">
+                                <li th:text="${videoKind.country}"></li>
+                            </ul></dd>
+                        </dl>
+
+                    </li>
+
+                    <!--    ./ Tab Panel 1  -->
+
+                    <!--     start Tab Panel 2  (Reviews Section) -->
+
+                    <li>
+                        <div class="uk-margin-small-top">
+                            <h3 class="uk-text-contrast uk-margin-top">Post a Review</h3>
+                            <div class="uk-alert uk-alert-warning" data-uk-alert="">
+                                <a href="" class="uk-alert-close uk-close"></a>
+                                <p><i class="uk-icon-exclamation-triangle uk-margin-small-right "></i> Please <a class="uk-text-contrast" href="login.html"> Log in</a> or Sign up to post reviews quicker.</p>
+                            </div>
+                            <form class="uk-form uk-margin-bottom">
+                                <div class="uk-form-row">
+                                    <textarea class="uk-width-1-1" cols="30" rows="5" placeholder="Type your review here..."></textarea>
+                                    <p class="uk-form-help-block">The <code>.uk-form-help-block</code> class creates an associated paragraph.</p>
+                                </div>
+                                <div class="uk-form-row">
+                                    <a href="" class="uk-button uk-button-large uk-button-success uk-float-right">Post</a>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div  class="uk-scrollable-box uk-responsive-width " data-simplebar-direction="vertical">
+                            <ul class="uk-comment-list uk-margin-top" >
+                                <li>
+                                    <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
+                                        <header class="uk-comment-header">
+                                            <img class="uk-comment-avatar uk-border-circle" src="assets/img/avatar3.jpg" width="50" height="50" alt=""/>
+                                            <h4 class="uk-comment-title">@movielover</h4>
+                                            <div class="uk-comment-meta">2 days ago </div>
+                                        </header>
+                                        <div class="uk-comment-body">
+                                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                                        </div>
+                                    </article>
+                                </li>
+                                <li>
+                                    <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
+                                        <header class="uk-comment-header">
+                                            <img class="uk-comment-avatar uk-border-circle" src="assets/img/avatar1.jpg" width="50" height="50" alt=""/>
+                                            <h4 class="uk-comment-title">@movielover</h4>
+                                            <div class="uk-comment-meta">5 days ago </div>
+                                        </header>
+                                        <div class="uk-comment-body">
+                                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                                        </div>
+                                    </article>
+                                </li>
+                                <li>
+                                    <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
+                                        <header class="uk-comment-header">
+                                            <img class="uk-comment-avatar uk-border-circle" src="assets/img/avatar4.svg" width="50" height="50" alt=""/>
+                                            <h4 class="uk-comment-title">@movielover</h4>
+                                            <div class="uk-comment-meta">23 days ago </div>
+                                        </header>
+                                        <div class="uk-comment-body">
+                                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                                        </div>
+                                    </article>
+                                </li>
+                                <li>
+                                    <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
+                                        <header class="uk-comment-header">
+                                            <img class="uk-comment-avatar uk-border-circle" src="assets/img/avatar3.jpg" width="50" height="50" alt=""/>
+                                            <h4 class="uk-comment-title">@movielover</h4>
+                                            <div class="uk-comment-meta">7 days ago </div>
+                                        </header>
+                                        <div class="uk-comment-body">
+                                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                                        </div>
+                                    </article>
+                                </li>
+                                <li>
+                                    <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
+                                        <header class="uk-comment-header">
+                                            <img class="uk-comment-avatar uk-border-circle" src="assets/img/avatar2.jpg" width="50" height="50" alt=""/>
+                                            <h4 class="uk-comment-title">@movielover</h4>
+                                            <div class="uk-comment-meta">84 days ago </div>
+                                        </header>
+                                        <div class="uk-comment-body">
+                                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+                                        </div>
+                                    </article>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!--     ./ Tab Panel 2  -->
+
+
+                    <!--     start Tab Panel 3 (Trailer Section)  -->
+
+                    <li>
+                        <div class="uk-cover uk-margin-top" style="height: 400px;">
+                            <!--<iframe data-uk-cover="data-uk-cover" src="http://www.youtube.com/embed/YE7VzlLtp-4?autoplay=1&amp;controls=0&amp;showinfo=0&amp;rel=0&amp;loop=1&amp;modestbranding=1&amp;wmode=transparent" width="560" height="315" frameborder="0" allowfullscreen=""></iframe>-->
+                        </div>
+                    </li>
+
+                    <!--     ./ Tab Panel 3  -->
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ./ Main Content (Media Page Section) -->
+<div class="uk-block ">
+    <div class="uk-container-center uk-container uk-margin-large-bottom">
+        <h3 class="uk-margin-large-bottom uk-text-contrast">관련영상</h3>
+        <div class="uk-margin" data-uk-slideset="{small: 2, medium: 4, large: 6}">
+            <div class="uk-slidenav-position uk-margin">
+                <ul class="uk-slideset uk-grid uk-flex-center uk-grid-width-1-1 uk-grid-width-large-1-6 uk-grid-width-medium-1-4 uk-grid-width-small-1-2">
+                    <li th:each="vi, index : ${videos}"><a th:href="@{'/media/list/' +${vi.video_seq}}"><img th:src="@{'/viewer/image/' + ${vi.video_seq}}" th:class="${vi.video_seq == video.video_seq ? 'video-fade': ''}" style="width: 600px;height: 300px;" alt="" th:text="${vi.title3}"/></a><i th:if="${vi.video_seq == video.video_seq}" class="fa fa-play-circle-o video-play" aria-hidden="true"/></li>
+                </ul>
+                <a href="#" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideset-item="previous"></a>
+                <a href="#" class="uk-slidenav uk-slidenav-next uk-slidenav-contrast" data-uk-slideset-item="next"></a>
+            </div>
+            <ul class="uk-slideset-nav uk-dotnav uk-dotnav-contrast uk-flex-center uk-margin-top"><li data-uk-slideset-item="0" class="uk-active"><a></a></li><li data-uk-slideset-item="1"><a></a></li><li data-uk-slideset-item="2"><a></a></li></ul>
+        </div>
+    </div>
+</div>
+<i class="fa fa-th-list" aria-hidden="true"></i>
+<div class="play-list-fade">
+    <div class="play-list-content"></div>
+    <div class="play-list-menu">
+        <h3 style="padding-left:10px;">재생목록</h3>
+        <ul class="uk-list uk-list-line" style="padding-top:20px;">
+            <li><span style="padding-left:10px;">123</span></li>
+            <li><span style="padding-left:10px;">123</span></li>
+            <li><span style="padding-left:10px;">123</span></li>
+            <li><span style="padding-left:10px;">123</span></li>
+            <li><span style="padding-left:10px;">123</span></li>
+            <li><span style="padding-left:10px;">123</span></li>
+        </ul>
+    </div>
+</div>
+<!--   Include JS   -->
+
+    <script th:src="@{/js/jquery.js}"></script>
+    <script th:src="@{/js/uikit.min.js}"></script>
+    <script th:src="@{/js/components/grid.min.js}"></script>
+    <script th:src="@{/js/core/nav.min.js}"></script>
+    <script th:src="@{/js/components/lightbox.js}"></script>
+    <script th:src="@{/js/components/slideset.min.js}"></script>
+    <script>
+        $('.fa-th-list').click(function() {
+            $(this).hide();
+            $('.play-list-fade').show('slow');
+            $('.play-list-fade').off('click');
+            $('.play-list-fade div:not(.play-list-menu)').on('click',function() {
+                $('.play-list-fade').hide('slow');
+                $('.fa-th-list').show();
+            })
+        })
+
+        $('#watchMeBtn').click(function() {
+            var video_seq = $(this).attr('data-video-seq');
+
+            $.ajax({
+                url:'/viewer/video/'+video_seq,
+                type:'post',
+                success:function(data) {
+                    var lightbox = UIkit.lightbox.create([
+                        {'source': data, 'type':'video'}
+                    ]);
+
+                    lightbox.show();
+                }, error:function(xhr, status, error) {
+                    console.log(error);
+                }
+            })
+
+        })
+    </script>
+</body>
+</html>

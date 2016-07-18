@@ -1,3 +1,62 @@
 <footer layout:fragment="footer">
-    foot
+    <!--     start Footer Section   -->
+
+    <footer id="tm-footer" class="uk-block uk-block-secondary uk-block-small">
+        <div class="uk-container-center uk-container">
+            <div class="uk-grid">
+                <div class="uk-width-medium-3-10"><div class="copyright-text"> 2016 <span class="uk-text-bold">Webflix</span> - Streaming Media</div></div>
+
+                <div class="uk-width-medium-7-10">
+                    <div class=" uk-float-right">
+                        <ul class="uk-subnav">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!--     ./ Footer Section   -->
+
+    <!--     start Offcanvas Menu   -->
+
+    <div id="offcanvas" class="uk-offcanvas">
+        <div class="uk-offcanvas-bar">
+            <div class="uk-panel">
+                <form class="uk-search">
+                    <input class="uk-search-field" type="search" placeholder="Search..."/>
+                </form>
+                <div class="uk-button-group">
+                    <a class="uk-button uk-button-link uk-button-large uk-text-muted" href="signup.html">Sign up</a>
+                    <a class="uk-button uk-button-success uk-button-large uk-margin-left" href="login.html"><i class="uk-icon-lock uk-margin-small-right"></i> Log in</a>
+                </div>
+            </div>
+            <ul class="uk-nav uk-nav-offcanvas uk-nav-parent-icon" data-uk-nav="data-uk-nav">
+                <li class="uk-active"><a href="/">전체</a></li>
+                <li><a href="#">추천</a></li>
+                <li><a href="/menu/영화">영화</a></li>
+                <li><a href="/menu/드라마">드라마</a></li>
+                <li class="uk-parent" data-uk-dropdown="data-uk-dropdown">
+                    <a href="#">장르 <i class="uk-icon-angle-down uk-margin-small-left"></i></a>
+                    <div class="uk-dropdown uk-dropdown-navbar">
+                        <ul class="uk-nav uk-nav-navbar">
+                            <li><a href="/menu/판타지">판타지</a></li>
+                            <li><a href="/menu/애니">애니</a> </li>
+                            <li><a href="/menu/SF">SF</a> </li>
+                            <li><a href="/menu/어드벤쳐">어드벤쳐</a> </li>
+                            <li><a href="/menu/코믹">코믹</a> </li>
+                            <li><a href="/menu/스릴러">스릴러</a> </li>
+                            <li><a href="/menu/로맨스">로맨스</a> </li>
+                            <li><a href="/menu/범죄">범죄</a> </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            <div class="uk-panel uk-text-center">
+
+            </div>
+        </div>
+    </div>
+
+    <!--   ./ Offcanvas Menu   -->
 </footer>

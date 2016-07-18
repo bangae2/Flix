@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by bangae1 on 2016-06-13.
  */
 @Entity
-@Table(name = "auth", schema = "bangae1", uniqueConstraints = @UniqueConstraint(columnNames = {"id"}))
+@Table(name = "auth", schema = "dev", uniqueConstraints = @UniqueConstraint(columnNames = {"id"}))
 public class AuthEntity {
     private Integer seq;
     private String id;
