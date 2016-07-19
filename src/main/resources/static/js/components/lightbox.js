@@ -448,7 +448,7 @@
                 var resolve = function(source, width, height) {
 
                     data.meta = {
-                        'content': '<video class="uk-responsive-width" src="'+source+'" width="100%" height="100%" controls style="position:fixed; height:100%;"></video>',
+                        'content': '<video id="video1" class="uk-responsive-width" width="100%" height="100%" controls="controls" autoplay="autoplay" style="position:fixed; height:100%;"><source src="'+source+'" type="video/mp4"/></video>',
                         'width': width,
                         'height': height
                     };
@@ -546,6 +546,8 @@
         // destroy content on modal hide
         modal.on("hide.uk.modal", function(e) {
             modal.content.html('');
+            /*플레이리스트 버튼 비활성화*/
+            $('.fa-th-list').hide();
         });
 
         var resizeCache = {w: window.innerWidth, h:window.innerHeight};

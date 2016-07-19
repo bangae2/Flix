@@ -102,6 +102,15 @@
             right: -12px;
             float: none;
             margin: 0px;
+            z-index: 5000;
+        }
+
+        .uk-list > li > span {
+            cursor:pointer;
+        }
+
+        .uk-list > li > span:hover {
+            color:#cccccc;
         }
     </style>
 
@@ -269,8 +278,6 @@
                     </li>
 
                     <!--     ./ Tab Panel 3  -->
-
-
                 </ul>
             </div>
         </div>
@@ -293,18 +300,13 @@
         </div>
     </div>
 </div>
-<i class="fa fa-th-list" aria-hidden="true"></i>
+<i class="fa fa-th-list" aria-hidden="true" style="display:none;"></i>
 <div class="play-list-fade">
     <div class="play-list-content"></div>
     <div class="play-list-menu">
         <h3 style="padding-left:10px;">재생목록</h3>
         <ul class="uk-list uk-list-line" style="padding-top:20px;">
-            <li><span style="padding-left:10px;">123</span></li>
-            <li><span style="padding-left:10px;">123</span></li>
-            <li><span style="padding-left:10px;">123</span></li>
-            <li><span style="padding-left:10px;">123</span></li>
-            <li><span style="padding-left:10px;">123</span></li>
-            <li><span style="padding-left:10px;">123</span></li>
+            <li th:each="vi, index:${videos}" th:attr="data-video-seq=${vi.video_seq}"><i class="fa fa-play-circle-o" aria-hidden="true" style="padding-left:5px;" th:if="${video.video_seq == vi.video_seq}"/><span style="padding-left:10px;" th:text="${vi.title3}"></span></li>
         </ul>
     </div>
 </div>
@@ -317,34 +319,68 @@
     <script th:src="@{/js/components/lightbox.js}"></script>
     <script th:src="@{/js/components/slideset.min.js}"></script>
     <script>
+
+        /* 플레이 리스트 열기 이벤트 */
         $('.fa-th-list').click(function() {
             $(this).hide();
-            $('.play-list-fade').show('slow');
+            $('.play-list-fade').fadeIn('slow');
             $('.play-list-fade').off('click');
             $('.play-list-fade div:not(.play-list-menu)').on('click',function() {
-                $('.play-list-fade').hide('slow');
+                $('.play-list-fade').fadeOut('slow');
                 $('.fa-th-list').show();
             })
         })
 
+        /* 영상보기 클릭시 */
         $('#watchMeBtn').click(function() {
             var video_seq = $(this).attr('data-video-seq');
+            var url = $.play(video_seq);
+            $.lightBoxShow(url);
+        })
 
+        /* 플레이 리스트 다른영상 선택시*/
+        $('.play-list-menu li').click(function() {
+            $('.play-list-menu li i').remove();
+            $(this).prepend('<i class="fa fa-play-circle-o" aria-hidden="true" style="padding-left:5px;"/>');
+            var video_seq = $(this).attr('data-video-seq');
+            var url = $.play(video_seq);
+            $('#video1').attr('src', url);
+            $('#video1')[0].load();
+            $('#video1')[0].play();
+        })
+
+
+        /* 동영상 플레이 function*/
+        $.play = function(video_seq) {
+            var url;
             $.ajax({
                 url:'/viewer/video/'+video_seq,
                 type:'post',
+                async:false,
                 success:function(data) {
-                    var lightbox = UIkit.lightbox.create([
-                        {'source': data, 'type':'video'}
-                    ]);
-
-                    lightbox.show();
+                    url = data;
                 }, error:function(xhr, status, error) {
                     console.log(error);
                 }
             })
+            return url;
+        }
 
-        })
+        $.lightBoxShow = function(url) {
+            var lightbox = UIkit.lightbox.create([
+                {'source': url, 'type':'video'}
+            ]);
+
+            lightbox.show();
+
+            /*플레이리스트 버튼 활성화*/
+            $('.fa-th-list').show();
+        }
+
+        $(document).on('ended', 'video', function (e) {
+            alert('video ended');
+        });
+
     </script>
 </body>
 </html>

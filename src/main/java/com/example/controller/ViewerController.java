@@ -25,6 +25,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -67,9 +68,10 @@ public class ViewerController {
     @ResponseBody
     @RequestMapping(value = "/video/{video_seq}", method = RequestMethod.POST, produces = "plain/text;charset=utf-8")
     public String video(@PathVariable("video_seq")Integer video_seq, HttpServletResponse res, HttpServletRequest req) {
-//        VideosEntity videosEntity = this.videosService.findOne(video_seq);
-        String temp = "C:/Users/bangae1/IdeaProjects/Flix/build/resources/main/static/videos/";
-        String realPath = "C:/attach/Demolition 2015 1080p WEB-DL x264 AC3-JYK.mp4";
+        VideosEntity videosEntity = this.videosService.findOne(video_seq);
+        debug(videosEntity);
+        String temp = env.getProperty("video.temp.path");
+        String realPath = videosEntity.getFile_path()+videosEntity.getFile_name();
         File file = new File(realPath);
         FileInputStream fis =null;
         FileOutputStream fos = null;
@@ -102,8 +104,13 @@ public class ViewerController {
             close(fin);
             VideoRemoveUtil util = new VideoRemoveUtil(temp + uuid + fileName);
         }
-        return "/videos/" + uuid + fileName;
+        return env.getProperty("video.resource.path") + uuid + fileName;
 
+    }
+
+    public void debug(VideosEntity ve) {
+            String file_path = ve.getFile_path();
+            ve.setFile_path("c:" + file_path);
     }
 
     public static void close(Closeable c) {
