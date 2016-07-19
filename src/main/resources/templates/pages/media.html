@@ -87,6 +87,22 @@
             position: fixed;
             z-index:3000;
         }
+
+        .uk-modal-dialog-lightbox {
+            margin: 0px auto;
+            padding: 0;
+            max-width: 95%;
+            max-width: calc(100% - 30px);
+            min-height: 50px;
+        }
+
+        .uk-modal-dialog-lightbox>.uk-close:first-child {
+            position: absolute;
+            top: 2px;
+            right: -12px;
+            float: none;
+            margin: 0px;
+        }
     </style>
 
 </head>
@@ -265,7 +281,7 @@
 <div class="uk-block ">
     <div class="uk-container-center uk-container uk-margin-large-bottom">
         <h3 class="uk-margin-large-bottom uk-text-contrast">관련영상</h3>
-        <div class="uk-margin" data-uk-slideset="{small: 2, medium: 4, large: 6}">
+        <div class="uk-margin" data-uk-slideset="{small: 2, medium: 4, large: 6, autoplay:true, animation:'slide-bottom'}">
             <div class="uk-slidenav-position uk-margin">
                 <ul class="uk-slideset uk-grid uk-flex-center uk-grid-width-1-1 uk-grid-width-large-1-6 uk-grid-width-medium-1-4 uk-grid-width-small-1-2">
                     <li th:each="vi, index : ${videos}"><a th:href="@{'/media/list/' +${vi.video_seq}}"><img th:src="@{'/viewer/image/' + ${vi.video_seq}}" th:class="${vi.video_seq == video.video_seq ? 'video-fade': ''}" style="width: 600px;height: 300px;" alt="" th:text="${vi.title3}"/></a><i th:if="${vi.video_seq == video.video_seq}" class="fa fa-play-circle-o video-play" aria-hidden="true"/></li>

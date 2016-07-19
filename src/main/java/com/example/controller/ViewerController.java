@@ -68,7 +68,7 @@ public class ViewerController {
     @RequestMapping(value = "/video/{video_seq}", method = RequestMethod.POST, produces = "plain/text;charset=utf-8")
     public String video(@PathVariable("video_seq")Integer video_seq, HttpServletResponse res, HttpServletRequest req) {
 //        VideosEntity videosEntity = this.videosService.findOne(video_seq);
-        String temp = "C:/Users/bangae1/IdeaProjects/Flix/build/classes/main/static/videos/";
+        String temp = "C:/Users/bangae1/IdeaProjects/Flix/build/resources/main/static/videos/";
         String realPath = "C:/attach/Demolition 2015 1080p WEB-DL x264 AC3-JYK.mp4";
         File file = new File(realPath);
         FileInputStream fis =null;

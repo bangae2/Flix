@@ -252,7 +252,7 @@
                 duration = 0;
             }
 
-            this.modal.dialog.animate({width: '100%', height: '100%'}, duration, 'swing', function() {
+            this.modal.dialog.animate({width: $(window).width(), height: $(window).height()}, duration, 'swing', function() {
                 $this.modal.loader.addClass('uk-hidden');
                 $this.modal.content.css({width:''}).animate({'opacity': 1}, function() {
                     $this.modal.closer.removeClass('uk-hidden');
@@ -448,7 +448,7 @@
                 var resolve = function(source, width, height) {
 
                     data.meta = {
-                        'content': '<video class="uk-responsive-width" src="'+source+'" width=100% height=100% controls></video>',
+                        'content': '<video class="uk-responsive-width" src="'+source+'" width="100%" height="100%" controls style="position:fixed; height:100%;"></video>',
                         'width': width,
                         'height': height
                     };
