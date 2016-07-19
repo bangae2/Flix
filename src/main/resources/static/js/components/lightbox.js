@@ -448,7 +448,7 @@
                 var resolve = function(source, width, height) {
 
                     data.meta = {
-                        'content': '<video id="video1" class="uk-responsive-width" width="100%" height="100%" controls="controls" autoplay="autoplay" style="position:fixed; height:100%;"><source src="'+source+'" type="video/mp4"/></video>',
+                        'content': '<video id="video" class="uk-responsive-width video-js vjs-default-skin vjs-ended" width="100%" height="100%" controls="controls" autoplay="autoplay" style="position:fixed; height:100%; width:100%;"><source src="'+source+'" type="video/mp4"/></video>',
                         'width': width,
                         'height': height
                     };
@@ -462,7 +462,7 @@
 
                     if (!cache[data.source]) {
 
-                        var vid = UI.$('<video style="position:fixed;visibility:hidden;top:-10000px;"></video>').attr('src', data.source).appendTo('body');
+                        var vid = UI.$('<video class="video-js vjs-default-skin vjs-ended" style="position:fixed;visibility:hidden;top:-10000px;"></video>').attr('src', data.source).appendTo('body');
 
                         var idle = setInterval(function() {
 

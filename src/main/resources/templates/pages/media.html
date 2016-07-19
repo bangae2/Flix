@@ -16,6 +16,8 @@
     <!--     Theme CSS   -->
     <link rel="stylesheet" th:href="@{/css/theme.css}"/>
     <link rel="stylesheet" th:href="@{/css/font-awesome.css}"/>
+
+    <link href="http://vjs.zencdn.net/5.10.7/video-js.css" rel="stylesheet"/>
     <style>
         .video-fade {
             opacity: 0.1;
@@ -120,7 +122,7 @@
 <!-- start Main Content (Media Page Section) -->
 
 <div id="tm-media-section" class="uk-block uk-block-small">
-
+    <input type="hidden" id="video_seq" th:value="${video.video_seq}"/>
     <div class="uk-container uk-container-center uk-width-8-10">
         <div class="media-container  uk-container-center">
             <!--<a class="uk-button uk-button-large uk-button-link uk-text-muted" href="index.html"><i class=" uk-icon-arrow-left uk-margin-small-right"></i> Back</a>-->
@@ -132,7 +134,7 @@
                     <img th:src="@{'/viewer/image/'+ ${video.video_seq}}" alt="Image" class="uk-scrollspy-inview uk-animation-fade" style="width: 400px;height: 445px;"/>
                 </div>
                 <a id="watchMeBtn" class="uk-button uk-button-primary uk-button-large uk-width-1-1 uk-margin-top"  th:attr="data-video-seq=${video.video_seq}"><i class="uk-icon-television uk-margin-small-right"></i> Watch Now</a>
-                <a class="uk-button uk-button-link uk-text-muted uk-button-large uk-width-1-1 uk-margin-top" href="login.html"><i class="uk-icon-heart uk-margin-small-right"></i> Add to Favourites</a>
+                <a id="favouriteBtn" class="uk-button uk-button-link uk-text-muted uk-button-large uk-width-1-1 uk-margin-top" href="login.html"><i class="uk-icon-heart uk-margin-small-right"></i> Add to Favourites</a>
             </div>
             <div class="uk-width-medium-7-10">
                 <div class="">
@@ -306,7 +308,7 @@
     <div class="play-list-menu">
         <h3 style="padding-left:10px;">재생목록</h3>
         <ul class="uk-list uk-list-line" style="padding-top:20px;">
-            <li th:each="vi, index:${videos}" th:attr="data-video-seq=${vi.video_seq}"><i class="fa fa-play-circle-o" aria-hidden="true" style="padding-left:5px;" th:if="${video.video_seq == vi.video_seq}"/><span style="padding-left:10px;" th:text="${vi.title3}"></span></li>
+            <li th:class="${video.video_seq == vi.video_seq ? 'active':''}" th:each="vi, index:${videos}" th:attr="data-video-seq=${vi.video_seq}"><i class="fa fa-play-circle-o" aria-hidden="true" style="padding-left:5px;" th:if="${video.video_seq == vi.video_seq}"/><span style="padding-left:10px;" th:text="${vi.title3}"></span></li>
         </ul>
     </div>
 </div>
@@ -318,7 +320,17 @@
     <script th:src="@{/js/core/nav.min.js}"></script>
     <script th:src="@{/js/components/lightbox.js}"></script>
     <script th:src="@{/js/components/slideset.min.js}"></script>
+    <script th:src="@{/js/video.js}"></script>
+    <script th:src="@{/js/video-ie8.js}"></script>
     <script>
+        var player;
+
+        /* 즐겨찾기 추가 */
+//        $('#favouriteBtn').click(function() {
+//            $.ajax({
+//
+//            })
+//        })
 
         /* 플레이 리스트 열기 이벤트 */
         $('.fa-th-list').click(function() {
@@ -336,19 +348,30 @@
             var video_seq = $(this).attr('data-video-seq');
             var url = $.play(video_seq);
             $.lightBoxShow(url);
+
+            var videoLoad = setInterval(videoLoad, 500);
+
+            /*video 태그 로드 완료시*/
+            function videoLoad() {
+                window.clearInterval(videoLoad);
+                var video = videojs('video').ready(function(){
+                    player = this;
+                    $.videoEventSetting(player);
+                });
+            }
         })
 
         /* 플레이 리스트 다른영상 선택시*/
         $('.play-list-menu li').click(function() {
             $('.play-list-menu li i').remove();
+            $('.play-list-menu li').removeClass('active');
+            $(this).addClass('active');
             $(this).prepend('<i class="fa fa-play-circle-o" aria-hidden="true" style="padding-left:5px;"/>');
             var video_seq = $(this).attr('data-video-seq');
             var url = $.play(video_seq);
-            $('#video1').attr('src', url);
-            $('#video1')[0].load();
-            $('#video1')[0].play();
+            player.src({"type":"video/mp4", "src":url});
+            player.play()
         })
-
 
         /* 동영상 플레이 function*/
         $.play = function(video_seq) {
@@ -366,6 +389,7 @@
             return url;
         }
 
+        /* media modal 생성 */
         $.lightBoxShow = function(url) {
             var lightbox = UIkit.lightbox.create([
                 {'source': url, 'type':'video'}
@@ -375,12 +399,45 @@
 
             /*플레이리스트 버튼 활성화*/
             $('.fa-th-list').show();
+
         }
 
-        $(document).on('ended', 'video', function (e) {
-            alert('video ended');
-        });
+        /*로그 기록*/
+        $.logSave = function(video_seq) {
+            $.ajax({
+                url:'/media/log/save/'+video_seq,
+                type:'post',
+                success:function(data) {
+                    console.log(data)
+                }, error:function(xhr, status, error) {
+                    console.log(error);
+                }
+            })
+        }
 
+        /*비디오 이벤트 설정*/
+        $.videoEventSetting = function(pla) {
+            pla.off('ended').on('ended', function() {
+                $.each($('.play-list-menu li'), function() {
+                    var flag = false;
+                    var cla = $(this).attr('class');
+                    $(this).removeClass('active');
+                    if(cla == 'active') {
+                        $(this).next().addClass('active').trigger('click');
+                        flag = true;
+                    }
+                    if(flag) {
+                        return false;
+                    }
+                })
+            });
+
+            pla.off('loadstart').on('loadstart', function() {
+                /* 로그 기록 */
+                var video_seq = $('#video_seq').val();
+                $.logSave(video_seq);
+            })
+        }
     </script>
 </body>
 </html>

@@ -14,11 +14,16 @@
 
     <!--     Theme CSS   -->
     <link rel="stylesheet" th:href="@{/css/theme.css}"/>
+    <link href="http://vjs.zencdn.net/5.10.7/video-js.css" rel="stylesheet"/>
+
+    <!-- If you'd like to support IE8 -->
     <script th:src="@{/js/jquery.js}"></script>
     <script th:src="@{/js/uikit.min.js}"></script>
     <script th:src="@{/js/components/grid.min.js}"></script>
     <script th:src="@{/js/core/nav.min.js}"></script>
     <script th:src="@{/js/components/pagination.js}"></script>
+    <script th:src="@{/js/video.js}"></script>
+    <script th:src="@{/js/video-ie8.js}"></script>
 </head>
 <body>
 <header th:replace="fragments/header :: header">
