@@ -114,6 +114,16 @@
         .uk-list > li > span:hover {
             color:#cccccc;
         }
+
+        .videojs-background-wrap {
+            overflow:hidden;
+            position:absolute;
+            height:100%;
+            width:100%;
+            top:0;
+            left:0;
+            z-index: -998;
+        }
     </style>
 
 </head>
@@ -436,6 +446,7 @@
                 /* 로그 기록 */
                 var video_seq = $('#video_seq').val();
                 $.logSave(video_seq);
+                pla.isFullscreen(true);
             })
         }
     </script>
