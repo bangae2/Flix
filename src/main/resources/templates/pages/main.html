@@ -29,8 +29,7 @@
             <div id="uk-grid" class="uk-grid-width-small-1-3 uk-grid-width-medium-1-4 uk-grid-width-large-1-5"  >
                 <div class="view" th:each="video, index : ${videos}" th:id="@{''+paging-+''+${index.count}}" th:attr="video-seq=${video.video_seq}">
                     <div class="uk-overlay uk-overlay-hover">
-                        <img  alt="Image" />
-                        <!--th:src="@{'/viewer/image/'+ ${video.video_seq}}"-->
+                        <img class="cover-img" alt="Image" />
                         <div class="uk-overlay-panel uk-overlay-fade uk-overlay-background  uk-overlay-icon"></div>
                         <a class="uk-position-cover" th:href="@{'/media/list/' + ${video.video_seq}}"></a>
                     </div>
@@ -50,6 +49,26 @@
                     </div>
                 </div>
             </div>
+            <script>
+
+                $(document).ready(function() {
+                    /* 현재 활성화된 이미지만로드*/
+                    $.dynamicImageViewer = function() {
+                        $.each($('.view'), function() {
+                            var video_seq = $(this).attr('video-seq');
+                            var target = $(this).find('.cover-img');
+                            var viewEnable = $(this).css('display');
+                            if(target.attr('src') == null || target.attr('src')=="") {
+                                if(viewEnable == "" || viewEnable == 'block') {
+                                    target.attr('src', '/viewer/image/'+video_seq);
+                                }
+                            }
+
+                        })
+                    }
+                    $.dynamicImageViewer();
+                })
+            </script>
             <div class="uk-margin-large-top uk-margin-bottom">
                 <ul class="uk-pagination" >
                     <!--<li class="uk-disabled"><span><i class="uk-icon-angle-double-left"></i></span></li>-->

@@ -5,6 +5,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by bangae11 on 2016-06-19.
@@ -20,6 +21,7 @@ public class VideosEntity {
     private String file_name;
     private String file_path;
     private String thumbnail;
+    private List<VideoLogEntity> videoLogEntities;
 
     public VideosEntity() {
     }
@@ -106,6 +108,15 @@ public class VideosEntity {
 
     public void setReg_date(String reg_date) {
         this.reg_date = reg_date;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "video_seq")
+    public List<VideoLogEntity> getVideoLogEntities() {
+        return videoLogEntities;
+    }
+
+    public void setVideoLogEntities(List<VideoLogEntity> videoLogEntities) {
+        this.videoLogEntities = videoLogEntities;
     }
 
     @Override

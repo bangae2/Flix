@@ -16,11 +16,22 @@
     <!--     Theme CSS   -->
     <link rel="stylesheet" th:href="@{/css/theme.css}"/>
     <link rel="stylesheet" th:href="@{/css/font-awesome.css}"/>
-
     <link href="http://vjs.zencdn.net/5.10.7/video-js.css" rel="stylesheet"/>
+
     <style>
         .video-fade {
-            opacity: 0.1;
+            opacity: 1;
+            position:fixed;
+            width:100%;
+            height:100%;
+            top:0px;
+            left:0px;
+            display:none;
+        }
+
+        .video-fade >video {
+            width:100%;
+            height:100%;
         }
 
         .video-play {
@@ -57,7 +68,16 @@
             font-size: 2em;
             position: fixed;
             right: 20px;
-            bottom: 20px;
+            top: 20px;
+            cursor: pointer;
+            z-index:5000;
+        }
+
+        .fa-arrow-circle-o-left {
+            font-size: 2em;
+            position: fixed;
+            left: 20px;
+            top: 20px;
             cursor: pointer;
             z-index:5000;
         }
@@ -88,23 +108,6 @@
             display: none;
             position: fixed;
             z-index:3000;
-        }
-
-        .uk-modal-dialog-lightbox {
-            margin: 0px auto;
-            padding: 0;
-            max-width: 95%;
-            max-width: calc(100% - 30px);
-            min-height: 50px;
-        }
-
-        .uk-modal-dialog-lightbox>.uk-close:first-child {
-            position: absolute;
-            top: 2px;
-            right: -12px;
-            float: none;
-            margin: 0px;
-            z-index: 5000;
         }
 
         .uk-list > li > span {
@@ -140,7 +143,7 @@
 
         <div class="uk-grid">
             <div class="uk-width-medium-3-10">
-                <div  class="media-cover">
+                <div  class="media-cover" style="margin-top: 0px;">
                     <img th:src="@{'/viewer/image/'+ ${video.video_seq}}" alt="Image" class="uk-scrollspy-inview uk-animation-fade" style="width: 400px;height: 445px;"/>
                 </div>
                 <a id="watchMeBtn" class="uk-button uk-button-primary uk-button-large uk-width-1-1 uk-margin-top"  th:attr="data-video-seq=${video.video_seq}"><i class="uk-icon-television uk-margin-small-right"></i> Watch Now</a>
@@ -227,54 +230,6 @@
                                         </div>
                                     </article>
                                 </li>
-                                <li>
-                                    <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
-                                        <header class="uk-comment-header">
-                                            <img class="uk-comment-avatar uk-border-circle" src="assets/img/avatar1.jpg" width="50" height="50" alt=""/>
-                                            <h4 class="uk-comment-title">@movielover</h4>
-                                            <div class="uk-comment-meta">5 days ago </div>
-                                        </header>
-                                        <div class="uk-comment-body">
-                                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-                                        </div>
-                                    </article>
-                                </li>
-                                <li>
-                                    <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
-                                        <header class="uk-comment-header">
-                                            <img class="uk-comment-avatar uk-border-circle" src="assets/img/avatar4.svg" width="50" height="50" alt=""/>
-                                            <h4 class="uk-comment-title">@movielover</h4>
-                                            <div class="uk-comment-meta">23 days ago </div>
-                                        </header>
-                                        <div class="uk-comment-body">
-                                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-                                        </div>
-                                    </article>
-                                </li>
-                                <li>
-                                    <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
-                                        <header class="uk-comment-header">
-                                            <img class="uk-comment-avatar uk-border-circle" src="assets/img/avatar3.jpg" width="50" height="50" alt=""/>
-                                            <h4 class="uk-comment-title">@movielover</h4>
-                                            <div class="uk-comment-meta">7 days ago </div>
-                                        </header>
-                                        <div class="uk-comment-body">
-                                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-                                        </div>
-                                    </article>
-                                </li>
-                                <li>
-                                    <article class="uk-comment uk-panel uk-panel-space uk-panel-box-secondary">
-                                        <header class="uk-comment-header">
-                                            <img class="uk-comment-avatar uk-border-circle" src="assets/img/avatar2.jpg" width="50" height="50" alt=""/>
-                                            <h4 class="uk-comment-title">@movielover</h4>
-                                            <div class="uk-comment-meta">84 days ago </div>
-                                        </header>
-                                        <div class="uk-comment-body">
-                                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-                                        </div>
-                                    </article>
-                                </li>
                             </ul>
                         </div>
                     </li>
@@ -312,26 +267,34 @@
         </div>
     </div>
 </div>
-<i class="fa fa-th-list" aria-hidden="true" style="display:none;"></i>
-<div class="play-list-fade">
-    <div class="play-list-content"></div>
-    <div class="play-list-menu">
-        <h3 style="padding-left:10px;">재생목록</h3>
-        <ul class="uk-list uk-list-line" style="padding-top:20px;">
-            <li th:class="${video.video_seq == vi.video_seq ? 'active':''}" th:each="vi, index:${videos}" th:attr="data-video-seq=${vi.video_seq}"><i class="fa fa-play-circle-o" aria-hidden="true" style="padding-left:5px;" th:if="${video.video_seq == vi.video_seq}"/><span style="padding-left:10px;" th:text="${vi.title3}"></span></li>
-        </ul>
+<div class="video-fade">
+    <video id="video" controls="controls" class="video-js vjs-default-skin" preload="none" width="100%" height="100%" style="width:100%; height:100%;">
+        <source type="video/mp4"/>
+    </video>
+</div>
+<div class="video-btn-group" style="display:none">
+    <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
+    <i class="fa fa-th-list" aria-hidden="true"></i>
+    <div class="play-list-fade">
+        <div class="play-list-content"></div>
+        <div class="play-list-menu">
+            <h3 style="padding-left:10px;">재생목록</h3>
+            <ul class="uk-list uk-list-line" style="padding-top:20px;">
+                <li th:class="${video.video_seq == vi.video_seq ? 'active':''}" th:each="vi, index:${videos}" th:attr="data-video-seq=${vi.video_seq}"><i class="fa fa-play-circle-o" aria-hidden="true" style="padding-left:5px;" th:if="${video.video_seq == vi.video_seq}"/><span style="padding-left:10px;" th:text="${vi.title3}"></span></li>
+            </ul>
+        </div>
     </div>
 </div>
 <!--   Include JS   -->
 
     <script th:src="@{/js/jquery.js}"></script>
-    <script th:src="@{/js/uikit.min.js}"></script>
-    <script th:src="@{/js/components/grid.min.js}"></script>
+    <script th:src="@{/js/uikit.js}"></script>
+    <script th:src="@{/js/components/grid.js}"></script>
     <script th:src="@{/js/core/nav.min.js}"></script>
     <script th:src="@{/js/components/lightbox.js}"></script>
-    <script th:src="@{/js/components/slideset.min.js}"></script>
-    <script th:src="@{/js/video.js}"></script>
-    <script th:src="@{/js/video-ie8.js}"></script>
+    <script th:src="@{/js/components/slideset.js}"></script>
+    <script src="http://vjs.zencdn.net/5.10.7/video.js"></script>
+    <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
     <script>
         var player;
 
@@ -341,6 +304,53 @@
 //
 //            })
 //        })
+
+        /*video 태그 로드 완료시*/
+        var video = videojs('video').ready(function(){
+            player = this;
+            $.videoEventSetting(player);
+
+            function newButtonToggle () {
+
+                videojs.newButton = videojs.Button.extend({
+                    init: function(player, options){
+                        videojs.Button.call(this, player, options);
+                        this.on('click', this.onClick);
+                    }
+                });
+
+                videojs.newButton.prototype.onClick = function() {
+                    //Add click routine here..
+                };
+
+                //Creating New Button
+                var createNewButton = function() {
+                    var props = {
+                        className: 'vjs-new-button vjs-control',
+                        innerHTML: '<div class="vjs-control-content">' + ('New') + '</div>',
+                        role: 'button',
+                        'aria-live': 'polite',
+                        tabIndex: 0
+                    };
+                    return videojs.Component.prototype.createEl(null, props);
+                };
+
+                //Adding the newly created button to Control Bar
+
+                videojs.plugin('newButton', function() {
+                    var options = { 'el' : createNewButton() };
+                    newButton = new videojs.newButton(this, options);
+                    this.controlBar.el().appendChild(newButton.el());
+                });
+
+                //Now setting up Player
+                var vid = videojs("video", {
+                    plugins : { newButton : {} }
+                });
+            }
+
+            newButtonToggle();
+        });
 
         /* 플레이 리스트 열기 이벤트 */
         $('.fa-th-list').click(function() {
@@ -353,22 +363,21 @@
             })
         })
 
+        $('.fa-arrow-circle-o-left').click(function() {
+            player.pause();
+            $('.video-fade').slideUp('slow');
+            $('.video-btn-group').hide();
+        })
+
         /* 영상보기 클릭시 */
         $('#watchMeBtn').click(function() {
             var video_seq = $(this).attr('data-video-seq');
             var url = $.play(video_seq);
-            $.lightBoxShow(url);
-
-            var videoLoad = setInterval(videoLoad, 500);
-
-            /*video 태그 로드 완료시*/
-            function videoLoad() {
-                window.clearInterval(videoLoad);
-                var video = videojs('video').ready(function(){
-                    player = this;
-                    $.videoEventSetting(player);
-                });
-            }
+//            $('.video-fade #video').attr('src', url);
+            $('.video-fade').slideDown('slow');
+            $('.video-btn-group').show();
+            player.src({"type":"video/mp4", "src":url});
+            player.play()
         })
 
         /* 플레이 리스트 다른영상 선택시*/
@@ -397,19 +406,6 @@
                 }
             })
             return url;
-        }
-
-        /* media modal 생성 */
-        $.lightBoxShow = function(url) {
-            var lightbox = UIkit.lightbox.create([
-                {'source': url, 'type':'video'}
-            ]);
-
-            lightbox.show();
-
-            /*플레이리스트 버튼 활성화*/
-            $('.fa-th-list').show();
-
         }
 
         /*로그 기록*/
@@ -446,7 +442,8 @@
                 /* 로그 기록 */
                 var video_seq = $('#video_seq').val();
                 $.logSave(video_seq);
-                pla.isFullscreen(true);
+                pla.play();
+//                pla.isFullscreen(true);
             })
         }
     </script>
