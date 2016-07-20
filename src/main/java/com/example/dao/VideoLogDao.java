@@ -7,4 +7,5 @@ import com.example.entity.VideoLogEntity;
  */
 public interface VideoLogDao {
     public void save(VideoLogEntity videoLogEntity);
+    public VideoLogEntity findMaxDateByVideoKindSeq(int video_kind_seq);
 }

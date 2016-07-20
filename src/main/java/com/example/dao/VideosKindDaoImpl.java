@@ -21,8 +21,24 @@ public class VideosKindDaoImpl implements VideosKindDao {
         return this.videosKindRepository.findOne(id);
     }
 
+    public List<VideosKindEntity> findAll() {
+        return this.videosKindRepository.findAll(sort("title1", "title2"));
+    }
 
-    public Sort title_sort() {
-        return new Sort(Sort.Direction.ASC, "title2");
+    @Override
+    public List<VideosKindEntity> findSearch(String text) {
+        return this.videosKindRepository.findSearch(text);
+    }
+
+    @Override
+    public List<VideosKindEntity> findGenre(String genre) {
+        return this.videosKindRepository.findGenre(genre);
+    }
+
+    public Sort sort(String column) {
+        return new Sort(Sort.Direction.ASC, new String[]{column});
+    }
+    public Sort sort(String column, String column2) {
+        return new Sort(Sort.Direction.ASC, new String[]{column, column2});
     }
 }

@@ -9,4 +9,7 @@ import java.util.List;
  */
 public interface VideosKindDao {
     public VideosKindEntity findOne(int id);
+    public List<VideosKindEntity> findAll();
+    public List<VideosKindEntity> findSearch(String text);
+    public List<VideosKindEntity> findGenre(String genre);
 }

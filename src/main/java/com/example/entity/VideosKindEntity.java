@@ -1,6 +1,7 @@
 package com.example.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by bangae1 on 2016-06-27.
@@ -8,9 +9,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "video_kind", schema = "dev", catalog = "")
 public class VideosKindEntity {
-    private int videoKindSeq;
-    private String coverName;
-    private String coverPath;
+    private int video_kind_seq;
+    private String cover_name;
+    private String cover_path;
     private String actor;
     private String country;
     private String genre;
@@ -19,36 +20,37 @@ public class VideosKindEntity {
     private double star;
     private String start_date;
     private boolean flag;
+    private List<VideosEntity> videosEntities;
 
     @Id
     @Column(name = "video_kind_seq")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public int getVideoKindSeq() {
-        return videoKindSeq;
+    public int getVideo_kind_seq() {
+        return video_kind_seq;
     }
 
-    public void setVideoKindSeq(int videoKindSeq) {
-        this.videoKindSeq = videoKindSeq;
+    public void setVideo_kind_seq(int video_kind_seq) {
+        this.video_kind_seq = video_kind_seq;
     }
 
     @Basic
     @Column(name = "cover_name")
-    public String getCoverName() {
-        return coverName;
+    public String getCover_name() {
+        return cover_name;
     }
 
-    public void setCoverName(String coverName) {
-        this.coverName = coverName;
+    public void setCover_name(String cover_name) {
+        this.cover_name = cover_name;
     }
 
     @Basic
     @Column(name = "cover_path")
-    public String getCoverPath() {
-        return coverPath;
+    public String getCover_path() {
+        return cover_path;
     }
 
-    public void setCoverPath(String coverPath) {
-        this.coverPath = coverPath;
+    public void setCover_path(String cover_path) {
+        this.cover_path = cover_path;
     }
 
     @Basic
@@ -131,6 +133,16 @@ public class VideosKindEntity {
         this.flag = flag;
     }
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "video_kind_seq")
+    public List<VideosEntity> getVideosEntities() {
+        return videosEntities;
+    }
+
+    public void setVideosEntities(List<VideosEntity> videosEntities) {
+        this.videosEntities = videosEntities;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -138,9 +150,9 @@ public class VideosKindEntity {
 
         VideosKindEntity that = (VideosKindEntity) o;
 
-        if (videoKindSeq != that.videoKindSeq) return false;
-        if (coverName != null ? !coverName.equals(that.coverName) : that.coverName != null) return false;
-        if (coverPath != null ? !coverPath.equals(that.coverPath) : that.coverPath != null) return false;
+        if (video_kind_seq != that.video_kind_seq) return false;
+        if (cover_name != null ? !cover_name.equals(that.cover_name) : that.cover_name != null) return false;
+        if (cover_path != null ? !cover_path.equals(that.cover_path) : that.cover_path != null) return false;
         if (title1 != null ? !title1.equals(that.title1) : that.title1 != null) return false;
         if (title2 != null ? !title2.equals(that.title2) : that.title2 != null) return false;
 
@@ -149,9 +161,9 @@ public class VideosKindEntity {
 
     @Override
     public int hashCode() {
-        int result = videoKindSeq;
-        result = 31 * result + (coverName != null ? coverName.hashCode() : 0);
-        result = 31 * result + (coverPath != null ? coverPath.hashCode() : 0);
+        int result = video_kind_seq;
+        result = 31 * result + (cover_name != null ? cover_name.hashCode() : 0);
+        result = 31 * result + (cover_path != null ? cover_path.hashCode() : 0);
         result = 31 * result + (title1 != null ? title1.hashCode() : 0);
         result = 31 * result + (title2 != null ? title2.hashCode() : 0);
         return result;
@@ -160,9 +172,9 @@ public class VideosKindEntity {
     @Override
     public String toString() {
         return "VideosKindEntity{" +
-                "videoKindSeq=" + videoKindSeq +
-                ", coverName='" + coverName + '\'' +
-                ", coverPath='" + coverPath + '\'' +
+                "videoKindSeq=" + video_kind_seq +
+                ", coverName='" + cover_name + '\'' +
+                ", coverPath='" + cover_path + '\'' +
                 ", actor='" + actor + '\'' +
                 ", country='" + country + '\'' +
                 ", genre='" + genre + '\'' +

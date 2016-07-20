@@ -13,12 +13,13 @@ public class VideoLogEntity {
     private String id;
     private int video_seq;
     private String insert_date;
+    private int video_kind_seq;
     private VideosEntity videosEntity;
 
     public VideoLogEntity() {
     }
 
-    @Id
+    @Basic
     @Column(name = "id", length = 20)
     public String getId() {
         return id;
@@ -28,7 +29,7 @@ public class VideoLogEntity {
         this.id = id;
     }
 
-    @Basic
+    @Id
     @Column(name = "video_seq")
     public int getVideo_seq() {
         return video_seq;
@@ -50,6 +51,17 @@ public class VideoLogEntity {
         this.insert_date = insert_date;
     }
 
+
+    @Basic
+    @Column(name = "video_kind_seq", nullable = false)
+    public int getVideo_kind_seq() {
+        return video_kind_seq;
+    }
+
+    public void setVideo_kind_seq(int video_kind_seq) {
+        this.video_kind_seq = video_kind_seq;
+    }
+
     @ManyToOne(cascade =  CascadeType.ALL)
     @JoinColumn(name = "video_seq", referencedColumnName = "video_seq", updatable = false, insertable = false)
     public VideosEntity getVideosEntity() {
@@ -63,9 +75,11 @@ public class VideoLogEntity {
     @Override
     public String toString() {
         return "VideoLogEntity{" +
-                ", id='" + id + '\'' +
+                "id='" + id + '\'' +
                 ", video_seq=" + video_seq +
                 ", insert_date='" + insert_date + '\'' +
+                ", video_kind_seq=" + video_kind_seq +
+                ", videosEntity=" + videosEntity +
                 '}';
     }
 }

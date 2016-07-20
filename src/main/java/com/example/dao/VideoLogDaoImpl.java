@@ -14,6 +14,15 @@ public class VideoLogDaoImpl implements VideoLogDao {
     private VideoLogRepository videoLogRepository;
 
     public void save(VideoLogEntity videoLogEntity) {
-        this.videoLogRepository.save(videoLogEntity);
+        VideoLogEntity videoLogEntity1 = videoLogRepository.findByVideoSeq(videoLogEntity.getVideo_seq(), videoLogEntity.getId());
+        if(videoLogEntity1 == null) {
+            this.videoLogRepository.save(videoLogEntity);
+        } else {
+            this.videoLogRepository.update(videoLogEntity.getId(), videoLogEntity.getInsert_date(), videoLogEntity.getVideo_seq(), videoLogEntity.getVideo_kind_seq());
+        }
+    }
+
+    public VideoLogEntity findMaxDateByVideoKindSeq(int video_kind_seq) {
+        return this.videoLogRepository.findMaxDateByVideoKindSeq(video_kind_seq);
     }
 }

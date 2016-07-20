@@ -14,8 +14,15 @@ public class VideoLogServiceImpl implements VideoLogService {
     @Autowired
     private VideoLogDao videoLogDao;
 
+    @Override
     @Transactional
     public void save(VideoLogEntity videoLogEntity) {
         this.videoLogDao.save(videoLogEntity);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public VideoLogEntity findMaxDateByVideoKindSeq(int video_kind_seq) {
+        return this.videoLogDao.findMaxDateByVideoKindSeq(video_kind_seq);
     }
 }

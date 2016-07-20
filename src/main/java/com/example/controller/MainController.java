@@ -1,6 +1,8 @@
 package com.example.controller;
 
 import com.example.entity.VideosEntity;
+import com.example.entity.VideosKindEntity;
+import com.example.service.VideosKindService;
 import com.example.service.VideosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -20,6 +22,9 @@ public class MainController {
     @Autowired
     private VideosService videosService;
 
+    @Autowired
+    private VideosKindService videosKindService;
+
     @RequestMapping(value="/login", method = RequestMethod.GET)
     public String index(Model model) {
         return "pages/login";
@@ -32,33 +37,35 @@ public class MainController {
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String main(Model model) {
-        List<VideosEntity> lists = this.videosService.findPaging(1);
+        List<VideosKindEntity> lists = this.videosKindService.findAll();
         debug(lists);
-        model.addAttribute("videos", lists);
+        model.addAttribute("videoKinds", lists);
         return "pages/main";
     }
 
     @RequestMapping(value="/search/{text}", method = RequestMethod.POST)
     public String search(@PathVariable("text")String text, Model model) {
-        List<VideosEntity> lists = this.videosService.findSearch(text);
+        List<VideosKindEntity> lists = this.videosKindService.findSearch(text);
         debug(lists);
-        model.addAttribute("videos", lists);
+        model.addAttribute("videoKinds", lists);
         return "pages/main";
     }
 
     @RequestMapping(value="/menu/{genre}", method = RequestMethod.GET)
     public String menu(@PathVariable("genre")String genre, Model model) {
-        List<VideosEntity> lists = this.videosService.findGenre(genre);
+        List<VideosKindEntity> lists = this.videosKindService.findGenre(genre);
         debug(lists);
-        model.addAttribute("videos", lists);
+        model.addAttribute("videoKinds", lists);
         return "pages/main";
     }
 
-    public void debug(List<VideosEntity> lists) {
-        for(VideosEntity ve : lists) {
-            String file_path = ve.getFile_path();
-            ve.setFile_path("c:" + file_path);
-
+    public void debug(List<VideosKindEntity> lists) {
+        for(VideosKindEntity vke : lists) {
+            List<VideosEntity> lis = vke.getVideosEntities();
+            for(VideosEntity ve : lis) {
+                String file_path = ve.getFile_path();
+                ve.setFile_path("c:" + file_path);
+            }
         }
     }
 }

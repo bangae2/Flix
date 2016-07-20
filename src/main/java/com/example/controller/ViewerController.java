@@ -62,7 +62,7 @@ public class ViewerController {
             imageBytes = IOUtils.toByteArray(fis);
         } catch (FileNotFoundException e) {
             VideosKindEntity videosKindEntity = videosKindService.findOne(videosEntity.getVideo_kind_seq());
-            filePath = "c:"+videosKindEntity.getCoverPath()+ videosKindEntity.getCoverName();
+            filePath = "c:"+videosKindEntity.getCover_path()+ videosKindEntity.getCover_name();
             file = new File(filePath);
             System.out.println("cover Image load !!!");
             System.out.println(filePath);
@@ -76,6 +76,32 @@ public class ViewerController {
                 e1.printStackTrace();
             }
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf(mimeType));
+        headers.setContentLength(file.length());
+
+        return new HttpEntity<byte[]>(imageBytes, headers);
+    }
+
+    @RequestMapping(value = "/cover/{video_kind_seq}", method = RequestMethod.GET)
+    @Transactional(readOnly = true)
+    public HttpEntity<byte[]> coverView(@PathVariable("video_kind_seq")Integer video_kind_seq, HttpServletRequest req, HttpServletResponse res) {
+        VideosKindEntity videosKindEntity = this.videosKindService.findOne(video_kind_seq);
+        String filePath = "c:"+videosKindEntity.getCover_path() + videosKindEntity.getCover_name();
+        File file = new File(filePath);
+        byte[] imageBytes = null;
+        String mimeType = "";
+        FileInputStream fis = null;
+
+        mimeType = new MimetypesFileTypeMap().getContentType(file);
+        try {
+            fis = new FileInputStream(file);
+            imageBytes = IOUtils.toByteArray(fis);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -22,6 +22,7 @@ public class VideosEntity {
     private String file_path;
     private String thumbnail;
     private List<VideoLogEntity> videoLogEntities;
+    private VideosKindEntity videosKindEntities;
 
     public VideosEntity() {
     }
@@ -117,6 +118,17 @@ public class VideosEntity {
 
     public void setVideoLogEntities(List<VideoLogEntity> videoLogEntities) {
         this.videoLogEntities = videoLogEntities;
+    }
+
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "video_kind_seq", referencedColumnName = "video_kind_seq", updatable = false, insertable = false)
+    public VideosKindEntity getVideosKindEntities() {
+        return videosKindEntities;
+    }
+
+    public void setVideosKindEntities(VideosKindEntity videosKindEntities) {
+        this.videosKindEntities = videosKindEntities;
     }
 
     @Override
