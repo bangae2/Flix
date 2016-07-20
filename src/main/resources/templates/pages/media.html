@@ -70,7 +70,7 @@
             right: 20px;
             top: 20px;
             cursor: pointer;
-            z-index:5000;
+            z-index:9999999999;
         }
 
         .fa-arrow-circle-o-left {
@@ -90,7 +90,7 @@
             top: 0px;
             padding-top: 20px;
             background-color: black;
-            z-index:4000;
+            z-index:9999999999;
         }
 
         .play-list-content {
@@ -98,7 +98,6 @@
             width: 100%;
             height: 100%;
             top:0px;
-            z-index:4000;
         }
 
         .play-list-fade {
@@ -107,7 +106,7 @@
             top:0px;
             display: none;
             position: fixed;
-            z-index:3000;
+            z-index:9999999990;
         }
 
         .uk-list > li > span {
@@ -118,15 +117,6 @@
             color:#cccccc;
         }
 
-        .videojs-background-wrap {
-            overflow:hidden;
-            position:absolute;
-            height:100%;
-            width:100%;
-            top:0;
-            left:0;
-            z-index: -998;
-        }
     </style>
 
 </head>
@@ -268,11 +258,9 @@
     </div>
 </div>
 <div class="video-fade">
-    <video id="video" controls="controls" class="video-js vjs-default-skin" preload="none" width="100%" height="100%" style="width:100%; height:100%;">
+    <video id="video" controls="controls" class="video-js vjs-default-skin vjs-big-play-centered" preload="none" width="100%" height="100%" style="width:100%; height:100%;">
         <source type="video/mp4"/>
     </video>
-</div>
-<div class="video-btn-group" style="display:none">
     <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i>
     <i class="fa fa-th-list" aria-hidden="true"></i>
     <div class="play-list-fade">
@@ -284,6 +272,9 @@
             </ul>
         </div>
     </div>
+</div>
+<div class="video-btn-group" style="display:none">
+
 </div>
 <!--   Include JS   -->
 
@@ -306,51 +297,12 @@
 //        })
 
         /*video 태그 로드 완료시*/
+
         var video = videojs('video').ready(function(){
             player = this;
             $.videoEventSetting(player);
-
-            function newButtonToggle () {
-
-                videojs.newButton = videojs.Button.extend({
-                    init: function(player, options){
-                        videojs.Button.call(this, player, options);
-                        this.on('click', this.onClick);
-                    }
-                });
-
-                videojs.newButton.prototype.onClick = function() {
-                    //Add click routine here..
-                };
-
-                //Creating New Button
-                var createNewButton = function() {
-                    var props = {
-                        className: 'vjs-new-button vjs-control',
-                        innerHTML: '<div class="vjs-control-content">' + ('New') + '</div>',
-                        role: 'button',
-                        'aria-live': 'polite',
-                        tabIndex: 0
-                    };
-                    return videojs.Component.prototype.createEl(null, props);
-                };
-
-                //Adding the newly created button to Control Bar
-
-                videojs.plugin('newButton', function() {
-                    var options = { 'el' : createNewButton() };
-                    newButton = new videojs.newButton(this, options);
-                    this.controlBar.el().appendChild(newButton.el());
-                });
-
-                //Now setting up Player
-                var vid = videojs("video", {
-                    plugins : { newButton : {} }
-                });
-            }
-
-            newButtonToggle();
         });
+
 
         /* 플레이 리스트 열기 이벤트 */
         $('.fa-th-list').click(function() {
@@ -363,6 +315,7 @@
             })
         })
 
+        /*뒤로가기 */
         $('.fa-arrow-circle-o-left').click(function() {
             player.pause();
             $('.video-fade').slideUp('slow');
@@ -442,8 +395,6 @@
                 /* 로그 기록 */
                 var video_seq = $('#video_seq').val();
                 $.logSave(video_seq);
-                pla.play();
-//                pla.isFullscreen(true);
             })
         }
     </script>
