@@ -173,16 +173,20 @@
         <div class="play-list-menu">
             <h3 style="padding-left:10px;">재생목록</h3>
             <ul class="uk-list uk-list-line" style="padding-top:20px;">
-                <li th:class="${videos[0].video_seq == vi.video_seq ? 'active':''}" th:each="vi, index:${videos}" th:attr="data-video-seq=${vi.video_seq}">
+                <li th:class="${videos[0].video_seq == vi.video_seq ? 'active':''}" th:each="vi, index:${videos}" th:attr="data-video-seq=${vi.video_seq}" th:attrappend="data-video-kind-seq=${vi.video_kind_seq}">
                     <i class="fa fa-play-circle-o" aria-hidden="true" style="padding-left:5px;" th:if="${videos[0].video_seq == vi.video_seq}"/>
                     <span style="padding-left:10px;" th:text="${vi.title3}"></span>
                 </li>
             </ul>
         </div>
     </div>
-</div>
-<div class="video-btn-group" style="display:none">
-
+    <div class="next-movie">
+        <div>
+            <img src=""/>
+            <i class="fa fa-play-circle-o next-movie-icon" aria-hidden="true"/>
+            <div class="next-movie-text"><span>10</span>초후 자동재생됩니다.</div>
+        </div>
+    </div>
 </div>
 <!--   Include JS   -->
 
@@ -266,7 +270,10 @@
         $('.fa-arrow-circle-o-left').click(function() {
             player.pause();
             $('.video-fade').slideUp('slow');
+            $('footer').show();
             $('.video-btn-group').hide();
+            $('html').removeClass('overflow-hidden');
+            nextMovieHide();
         })
 
         /* 영상보기 클릭시 */
@@ -278,6 +285,12 @@
             $('.video-btn-group').show();
             player.src({"type":"video/mp4", "src":url});
             player.play()
+
+            /*footer 숨기기*/
+            $('footer').hide();
+
+            /* html 스크롤 없애기*/
+            $('html').addClass('overflow-hidden');
 
             /* 로그 기록 */
             var video_kind_seq = $('#video_kind_seq').val();
@@ -339,6 +352,7 @@
                     if(cla == 'active') {
                         $(this).next().addClass('active').trigger('click');
                         flag = true;
+                        nextMovieHide();
                     }
                     if(flag) {
                         return false;
@@ -348,8 +362,48 @@
 
             /*동영상 준비 완료 이벤트*/
             pla.off('loadstart').on('loadstart', function() {
-
+                timeupdate(pla);
             })
+        }
+
+        function timeupdate(pla) {
+            var timeupdateCount = 0;
+            pla.on('timeupdate', function() {
+                var duration = Math.floor(this.duration());
+                var current = Math.floor(this.currentTime());
+                // <![CDATA[
+
+                if((duration - 10) <= current) {
+                    $('.next-movie-text span').text(duration - current);
+                    if(timeupdateCount == 0) {
+                        nextMovieShow();
+                    }
+                    timeupdateCount++;
+
+                }
+                // ]]>
+            })
+        }
+
+        function nextMovieShow() {
+            var video_kind_seq = $('.play-list-menu li.active').next().attr('data-video-kind-seq');
+            var video_seq = $('.play-list-menu li.active').next().attr('data-video-seq');
+            $('.video-fade div.video-js').css({
+                'background-image':'url("/viewer/cover/'+video_kind_seq+'")',
+                'background-size':'100% 100%'
+            });
+            $('video').css({'width':'500px', 'height':'300px', 'top':'55px'});
+            $('.next-movie').show();
+            $('.next-movie img').attr('src', '/viewer/image/'+video_seq);
+        }
+
+        function nextMovieHide() {
+            $('.video-fade').children('div').css({
+                'background-image':'',
+                'background-size':''
+            });
+            $('video').css({'width':'100%', 'height':'100%', 'top':'0px'});
+            $('.next-movie').hide();
         }
     </script>
 </body>
