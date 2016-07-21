@@ -16,6 +16,11 @@ public class VideoFavDaoImpl implements VideoFavDao {
     private VideoFavRepository videoFavRepository;
 
     @Override
+    public List<VideoFavEntity> findAll() {
+        return this.videoFavRepository.findAll();
+    }
+
+    @Override
     public VideoFavEntity findOne(int video_seq) {
         return this.videoFavRepository.findOne(video_seq);
     }

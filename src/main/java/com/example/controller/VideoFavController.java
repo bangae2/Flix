@@ -6,6 +6,7 @@ import com.example.service.VideoFavService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,5 +39,12 @@ public class VideoFavController {
             return "D";
         }
 
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String list(Model model) {
+        List<VideoFavEntity> lists = videoFavService.findAll();
+        model.addAttribute("favs", lists);
+        return "pages/fav";
     }
 }

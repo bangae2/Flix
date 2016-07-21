@@ -2,6 +2,10 @@ package com.example.config;
 
 import com.example.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
@@ -15,10 +19,13 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
+import javax.servlet.DispatcherType;
+import javax.servlet.Filter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.EnumSet;
 
 /**
  * Created by bangae1 on 2016-07-05.
@@ -27,7 +34,6 @@ import java.io.IOException;
 @EnableWebSecurity
 @EnableJpaRepositories(basePackages = {"com.example.repository"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
     @Autowired
     private UsersService usersService;
 
@@ -65,5 +71,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             }
         };
         return fail;
+    }
+
+    @Bean
+    public FilterRegistrationBean getSpringSecurityFilterChainBindedToError(
+            @Qualifier("springSecurityFilterChain") Filter springSecurityFilterChain) {
+
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(springSecurityFilterChain);
+        registration.setDispatcherTypes(EnumSet.allOf(DispatcherType.class));
+        return registration;
     }
 }

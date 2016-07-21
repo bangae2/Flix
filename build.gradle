@@ -34,6 +34,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-ws')
+	compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity4', version: '2.1.2.RELEASE'
 	compile group: 'mysql', name: 'mysql-connector-java', version: '6.0.3'
 	compile group: 'commons-io', name: 'commons-io', version: '2.5'
 	compile group: 'com.google.guava', name: 'guava', version: '19.0'

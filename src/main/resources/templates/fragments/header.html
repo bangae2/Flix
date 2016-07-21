@@ -4,10 +4,32 @@
         <div class="uk-container uk-container-center ">
             <a class="uk-navbar-brand uk-hidden-small" href="/"><i class="uk-icon-small uk-text-primary uk-margin-small-right uk-icon-play-circle"></i> WEBFLIX</a>
             <div class="uk-navbar-flip uk-hidden-small">
-                <div class="uk-button-group">
-                    <a class="uk-button uk-button-link uk-button-large" href="/logout" th:text="chojinwoo"></a>
+                <div class="uk-button-dropdown" aria-haspopup="true" aria-expended="false" aria-expanded="false">
+                    <button class="uk-dropdown-btn uk-button uk-button-link uk-button-large" sec:authentication="name"> <i class="uk-icon-caret-down"></i></button>
+                    <div class="uk-dropdown-content uk-dropdown uk-dropdown-bottom" style="top: 40px; left: -109px;">
+                        <ul class="uk-nav uk-nav-dropdown">
+                            <li class="nav-header">USER</li>
+                            <li><a href="/fav/list">플레이리스트</a></li>
+                            <li class="uk-nav-divider"></li>
+                            <li class="nav-header">ADMIN</li>
+                            <li><a href="/WebFlix/admin/kind">카테고리</a></li>
+                            <li><a href="/WebFlix/admin/main">영화</a></li>
+                            <li class="uk-nav-divider"></li>
+                            <li><a href="/WebFlix/logout">로그아웃</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
+            <script>
+                $('.uk-dropdown-btn').click(function() {
+                    var display = $('.uk-dropdown-content').css('display');
+                    if(display == 'block') {
+                        $('.uk-dropdown-content').css('display', 'none');
+                    } else {
+                        $('.uk-dropdown-content').css('display', 'block');
+                    }
+                })
+            </script>
             <a href="#offcanvas" class="uk-navbar-toggle uk-visible-small uk-icon-medium" data-uk-offcanvas="data-uk-offcanvas"></a>
             <div class="uk-navbar-flip uk-visible-small">
                 <a href="#offcanvas" class="uk-navbar-toggle uk-navbar-toggle-alt uk-icon-medium" data-uk-offcanvas="data-uk-offcanvas"></a>

@@ -1,4 +1,4 @@
-/*! UIkit 2.26.3 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
+/*! UIkit 2.26.4 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
 (function(addon) {
 
     var component;
@@ -22,9 +22,10 @@
     UI.component('lightbox', {
 
         defaults: {
-            "group"      : false,
-            "duration"   : 400,
-            "keyboard"   : true
+            "allowfullscreen" : true,
+            "duration"        : 400,
+            "group"           : false,
+            "keyboard"        : true
         },
 
         index : 0,
@@ -143,8 +144,8 @@
                 "item"     : item,
                 "meta"     : {
                     "content" : '',
-                    "width"   : '100%',
-                    "height"  : '100%'
+                    "width"   : null,
+                    "height"  : null
                 }
             };
 
@@ -252,7 +253,7 @@
                 duration = 0;
             }
 
-            this.modal.dialog.animate({width: $(window).width(), height: $(window).height()}, duration, 'swing', function() {
+            this.modal.dialog.animate({width: w + pad, height: h + pad, top: t }, duration, 'swing', function() {
                 $this.modal.loader.addClass('uk-hidden');
                 $this.modal.content.css({width:''}).animate({'opacity': 1}, function() {
                     $this.modal.closer.removeClass('uk-hidden');
@@ -331,7 +332,7 @@
                 var id, matches, resolve = function(id, width, height) {
 
                     data.meta = {
-                        'content': '<iframe src="//www.youtube.com/embed/'+id+'" width="'+width+'" height="'+height+'" style="max-width:100%;"></iframe>',
+                        'content': '<iframe src="//www.youtube.com/embed/'+id+'" width="'+width+'" height="'+height+'" style="max-width:100%;"'+(modal.lightbox.options.allowfullscreen?' allowfullscreen':'')+'></iframe>',
                         'width': width,
                         'height': height
                     };
@@ -401,7 +402,7 @@
                 var id, resolve = function(id, width, height) {
 
                     data.meta = {
-                        'content': '<iframe src="//player.vimeo.com/video/'+id+'" width="'+width+'" height="'+height+'" style="width:100%;box-sizing:border-box;"></iframe>',
+                        'content': '<iframe src="//player.vimeo.com/video/'+id+'" width="'+width+'" height="'+height+'" style="width:100%;box-sizing:border-box;"'+(modal.lightbox.options.allowfullscreen?' allowfullscreen':'')+'></iframe>',
                         'width': width,
                         'height': height
                     };
@@ -448,7 +449,7 @@
                 var resolve = function(source, width, height) {
 
                     data.meta = {
-                        'content': '<video id="video" class="uk-responsive-width video-js vjs-default-skin vjs-ended" width="100%" height="100%" controls="controls" autoplay="autoplay" style="position:fixed; height:100%; width:100%;"><source src="'+source+'" type="video/mp4"/></video>',
+                        'content': '<video class="uk-responsive-width" src="'+source+'" width="'+width+'" height="'+height+'" controls></video>',
                         'width': width,
                         'height': height
                     };
@@ -462,7 +463,7 @@
 
                     if (!cache[data.source]) {
 
-                        var vid = UI.$('<video class="video-js vjs-default-skin vjs-ended" style="position:fixed;visibility:hidden;top:-10000px;"></video>').attr('src', data.source).appendTo('body');
+                        var vid = UI.$('<video style="position:fixed;visibility:hidden;top:-10000px;"></video>').attr('src', data.source).appendTo('body');
 
                         var idle = setInterval(function() {
 
@@ -493,7 +494,7 @@
                 var resolve = function (source, width, height) {
 
                     data.meta = {
-                        'content': '<iframe class="uk-responsive-width" src="' + source + '" width="' + width + '" height="' + height + '"></iframe>',
+                        'content': '<iframe class="uk-responsive-width" src="' + source + '" width="' + width + '" height="' + height + '"'+(modal.lightbox.options.allowfullscreen?' allowfullscreen':'')+'></iframe>',
                         'width': width,
                         'height': height
                     };
@@ -521,7 +522,7 @@
         // init lightbox container
         modal = UI.$([
             '<div class="uk-modal">',
-                '<div class="uk-modal-dialog uk-modal-dialog-lightbox uk-slidenav-position" style="margin-left:auto;margin-right:auto;width:100%;height:100%;">',
+                '<div class="uk-modal-dialog uk-modal-dialog-lightbox uk-slidenav-position" style="margin-left:auto;margin-right:auto;width:200px;height:200px;top:'+Math.abs(window.innerHeight/2 - 200)+'px;">',
                     '<a href="#" class="uk-modal-close uk-close uk-close-alt"></a>',
                     '<div class="uk-lightbox-content"></div>',
                     '<div class="uk-modal-spinner uk-hidden"></div>',
@@ -546,8 +547,6 @@
         // destroy content on modal hide
         modal.on("hide.uk.modal", function(e) {
             modal.content.html('');
-            /*플레이리스트 버튼 비활성화*/
-            $('.fa-th-list').hide();
         });
 
         var resizeCache = {w: window.innerWidth, h:window.innerHeight};

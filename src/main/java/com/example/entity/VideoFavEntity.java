@@ -10,6 +10,7 @@ import javax.persistence.*;
 public class VideoFavEntity {
     private Integer video_seq;
     private String id;
+    private VideosEntity videosEntity;
 
     @Id
     @Column(name = "video_seq")
@@ -29,6 +30,16 @@ public class VideoFavEntity {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "video_seq", referencedColumnName = "video_seq", updatable = false, insertable = false)
+    public VideosEntity getVideosEntity() {
+        return videosEntity;
+    }
+
+    public void setVideosEntity(VideosEntity videosEntity) {
+        this.videosEntity = videosEntity;
     }
 
     @Override

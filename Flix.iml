@@ -13,7 +13,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
-          <factory-entry name="entityManagerFactory" value="651a5693-08f9-4dec-9d55-b551f994f7a8" />
+          <factory-entry name="persistenceUnit" value="e47c27ec-e98b-478b-ba42-25e670be9c80" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/META-INF/persistence.xml" />
       </configuration>
@@ -117,5 +117,6 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.hamcrest:hamcrest-library:1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.objenesis:objenesis:2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework:spring-test:4.2.7.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE" level="project" />
   </component>
 </module>

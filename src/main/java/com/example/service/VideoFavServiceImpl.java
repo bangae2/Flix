@@ -17,6 +17,11 @@ public class VideoFavServiceImpl implements VideoFavService {
     private VideoFavDao videoFavDao;
 
     @Override
+    public List<VideoFavEntity> findAll() {
+        return this.videoFavDao.findAll();
+    }
+
+    @Override
     public VideoFavEntity findOne(int video_seq) {
         return this.videoFavDao.findOne(video_seq);
     }
