@@ -6,6 +6,7 @@ import com.example.service.VideosKindService;
 import com.example.service.VideosService;
 import com.example.util.VideoRemoveUtil;
 import com.google.common.io.ByteStreams;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -120,36 +121,16 @@ public class ViewerController {
         String temp = env.getProperty("video.temp.path");
         String realPath = "c:"+videosEntity.getFile_path()+videosEntity.getFile_name();
         File file = new File(realPath);
-        FileInputStream fis =null;
-        FileOutputStream fos = null;
-        FileChannel fin = null;
-        FileChannel fout = null;
+
         String uuid = UUID.randomUUID().toString();
         String fileName = file.getName();
         fileName = fileName.substring(fileName.length() -4);
+        File eFile = new File(temp + uuid + fileName);
         try {
-
-            fis = new FileInputStream(file);
-            fos = new FileOutputStream(temp + uuid + fileName);
-
-            fin = fis.getChannel();
-            fout = fos.getChannel();
-
-            ByteBuffer buf = ByteBuffer.allocateDirect((int) file.length());
-
-            fin.read(buf);
-            buf.flip();
-            fout.write(buf);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            FileUtils.copyFile(file, eFile);
+            VideoRemoveUtil util = new VideoRemoveUtil(temp + uuid + fileName);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            close(fos);
-            close(fis);
-            close(fout);
-            close(fin);
-            VideoRemoveUtil util = new VideoRemoveUtil(temp + uuid + fileName);
         }
         return env.getProperty("video.resource.path") + uuid + fileName;
 
