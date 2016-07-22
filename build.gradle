@@ -48,6 +48,17 @@ apply plugin: 'application'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
+jar {
+	from configurations.runtime
+	manifest {
+		attributes(
+				'Main-Class': 'com.example.DemoApplication',
+				'Class-Path': configurations.compile.collect {it.toURI().toString()}.join(' ')
+		)
+	}
+	baseName 'Flix'
+}
+
 idea {
 	module {
 		inheritOutputDirs = false
