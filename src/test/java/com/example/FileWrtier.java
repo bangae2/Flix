@@ -1,29 +1,23 @@
 package com.example;
 
-import org.apache.commons.io.FileUtils;
-import org.omg.SendingContext.RunTime;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by bangae1 on 2016-07-16.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = DemoApplication.class)
+@WebAppConfiguration
+@Transactional
 public class FileWrtier {
+
     public static void main(String[] args) {
 
 
-        String uuid = UUID.randomUUID().toString();
-        String file = "C:\\attach\\BreakingBad1\\Breaking.Bad.S01E01.720p.HDTV.x264.mp4";
-        String tempFile = "C:\\attach\\BreakingBad1\\" + UUID.randomUUID().toString() + ".mp4";
-        File sfile = new File(file);
-        File efile = new File(tempFile);
-        try {
-            FileUtils.copyFile(sfile, efile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
+
 }

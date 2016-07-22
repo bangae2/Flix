@@ -37,7 +37,7 @@ public class MainController {
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String main(Model model) {
-        List<VideosKindEntity> lists = this.videosKindService.findAll();
+        List<VideosKindEntity> lists = this.videosKindService.findByFlag();
         debug(lists);
         model.addAttribute("videoKinds", lists);
         return "pages/main";

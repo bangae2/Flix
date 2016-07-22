@@ -40,4 +40,10 @@ public class VideosKindServiceImpl implements VideosKindService {
     public List<VideosKindEntity> findGenre(String genre) {
         return this.videosKindDao.findGenre(genre);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<VideosKindEntity> findByFlag() {
+        return this.videosKindDao.findByFlag();
+    }
 }

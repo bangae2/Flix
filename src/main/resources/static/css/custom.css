@@ -1,3 +1,15 @@
+::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+}
+::-webkit-scrollbar-track-piece  {
+    background-color: #222121;
+}
+::-webkit-scrollbar-thumb:vertical {
+    height: 30px;
+    background-color: black;
+}
+
 .video-fade {
     opacity: 1;
     position:fixed;

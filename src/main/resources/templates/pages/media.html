@@ -367,15 +367,16 @@
         }
 
         function timeupdate(pla) {
+
             var timeupdateCount = 0;
             pla.on('timeupdate', function() {
                 var duration = Math.floor(this.duration());
                 var current = Math.floor(this.currentTime());
                 // <![CDATA[
-
                 if((duration - 10) <= current) {
                     $('.next-movie-text span').text(duration - current);
                     if(timeupdateCount == 0) {
+                        alert(duration);
                         nextMovieShow();
                     }
                     timeupdateCount++;

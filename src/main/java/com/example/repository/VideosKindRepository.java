@@ -12,9 +12,12 @@ import java.util.List;
  */
 public interface VideosKindRepository extends JpaRepository<VideosKindEntity, Integer> {
 
-    @Query(value = "select * from video_kind where concat(title1, title2) like CONCAT('%',:text,'%')", nativeQuery = true)
+    @Query(value = "select * from video_kind where flag = true order by title1, title2", nativeQuery = true)
+    public List<VideosKindEntity> findByFlag();
+
+    @Query(value = "select * from video_kind where concat(title1, title2) like CONCAT('%',:text,'%') and flag = true order by title1, title2", nativeQuery = true)
     public List<VideosKindEntity> findSearch(@Param("text")String text);
 
-    @Query(value = "select * from video_kind where genre like CONCAT('%',:genre,'%')", nativeQuery = true)
+    @Query(value = "select * from video_kind where genre like CONCAT('%',:genre,'%') and flag = true order by title1, title2", nativeQuery = true)
     public List<VideosKindEntity> findGenre(@Param("genre")String genre);
 }

@@ -35,6 +35,11 @@ public class VideosKindDaoImpl implements VideosKindDao {
         return this.videosKindRepository.findGenre(genre);
     }
 
+    @Override
+    public List<VideosKindEntity> findByFlag() {
+        return this.videosKindRepository.findByFlag();
+    }
+
     public Sort sort(String column) {
         return new Sort(Sort.Direction.ASC, new String[]{column});
     }

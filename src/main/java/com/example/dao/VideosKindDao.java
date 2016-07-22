@@ -12,4 +12,5 @@ public interface VideosKindDao {
     public List<VideosKindEntity> findAll();
     public List<VideosKindEntity> findSearch(String text);
     public List<VideosKindEntity> findGenre(String genre);
+    public List<VideosKindEntity> findByFlag();
 }

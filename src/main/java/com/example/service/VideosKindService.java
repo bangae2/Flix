@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.entity.VideosKindEntity;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface VideosKindService {
     public List<VideosKindEntity> findAll();
     public List<VideosKindEntity> findSearch(String text);
     public List<VideosKindEntity> findGenre(String genre);
+    public List<VideosKindEntity> findByFlag();
 }

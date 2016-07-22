@@ -257,8 +257,9 @@
             })
         }
 
+
+        var timeupdateCount = 0;
         function timeupdate(pla) {
-            var timeupdateCount = 0;
             pla.on('timeupdate', function() {
                 var duration = Math.floor(this.duration());
                 var current = Math.floor(this.currentTime());
