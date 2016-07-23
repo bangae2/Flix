@@ -32,10 +32,10 @@
             <thead>
                 <tr>
                     <th class="uk-text-center" width="10%">SEQ</th>
-                    <th class="uk-text-center" width="30%">제목</th>
+                    <th class="uk-text-center" width="25%">제목</th>
                     <th class="uk-text-center" width="10%">시즌</th>
                     <th class="uk-text-center" width="10%">제작국가</th>
-                    <th class="uk-text-center" width="20%">장르</th>
+                    <th class="uk-text-center" width="15%">장르</th>
                     <th class="uk-text-center" width="10%">사용여부</th>
                     <th class="uk-text-center">삭제</th>
                 </tr>
@@ -47,12 +47,15 @@
             <tbody>
                 <tr th:each="kind, index : ${kinds}" th:id="@{'kind-'+${index.count}}">
                     <td class="uk-text-center" width="10%" th:text="${kind.video_kind_seq}"></td>
-                    <td  width="30%" th:text="${kind.title1}"></td>
-                    <td  width="10%" class="uk-text-center" th:text="${kind.title2}"></td>
-                    <td  width="10%" class="uk-text-center" th:text="${kind.country}"></td>
-                    <td  width="20%" th:text="${kind.genre}"></td>
-                    <td  width="10%" class="uk-text-center" th:text="${kind.flag}"></td>
-                    <td align="right"><button class="uk-button uk-button-danger kind-del-btn" th:attr="data-video-kind-seq=${kind.video_kind_seq}">삭제</button></td>
+                    <td width="25%" th:text="${kind.title1}"></td>
+                    <td width="10%" class="uk-text-center" th:text="${kind.title2}"></td>
+                    <td width="10%" class="uk-text-center" th:text="${kind.country}"></td>
+                    <td width="15%" th:text="${kind.genre}"></td>
+                    <td width="10%" class="uk-text-center" th:text="${kind.flag}"></td>
+                    <td class="uk-text-right">
+                        <button class="uk-button uk-button-success thumbnail-btn">썸네일</button>
+                        <button class="uk-button uk-button-danger kind-del-btn" th:attr="data-video-kind-seq=${kind.video_kind_seq}">삭제</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -141,22 +144,64 @@
                 <td width="20%" th:text="${movie.file_path}"></td>
                 <td width="20%" th:text="${movie.title3}"></td>
                 <td width="20%" th:text="${movie.thumbnail}"></td>
-                <td class="uk-text-center"><button class="uk-button uk-button-danger movie-del-btn" th:attr="data-video-seq=${movie.video_seq}">삭제</button></td>
+                <td class="uk-text-right"><button class="uk-button uk-button-danger movie-del-btn" th:attr="data-video-seq=${movie.video_seq}">삭제</button></td>
             </tr>
             </tbody>
         </table>
     </div>
     <div style="text-align:right">
-        <button class="uk-button uk-button-primary" style="margin-top:20px;">파일업로드</button>
+        <button class="uk-button uk-button-primary" style="margin-top:20px;" data-uk-modal="{target:'#movie-modal', bgclose:false}">파일업로드</button>
+    </div>
+
+    <div id="movie-modal" class="uk-modal">
+        <div class="uk-modal-dialog">
+            <a class="uk-modal-close uk-close"></a>
+            <div class="uk-modal-header">
+                <h2>영화등록</h2>
+            </div>
+            <div class="uk-modal-body">
+                <form class="uk-form" enctype="multipart/form-data" id="movie-form">
+                    <input type="hidden" name="video_kind_seq" id="video_kind_seq" th:value="${movies[0].video_kind_seq}"/>
+                    <fieldset>
+                        <div class="uk-form-row">
+                            <label for="title1">제목</label>
+                            <input type="text" id="title3" name="title3" class="uk-width-1-1"/>
+                        </div>
+                        <div class="uk-form-row">
+                            <label for="title2">스토리</label>
+                            <textarea rows="3" id="story" name="story" class="uk-width-1-1"/>
+                        </div>
+                        <div id="mupload-drop" class="uk-placeholder uk-text-center">
+                            <i class="uk-icon-cloud-upload uk-icon-medium uk-text-muted uk-margin-small-right"></i> 커버사진 업로드 : <a class="uk-form-file">파일선택<input id="movie" name="movie" type="file" accept="video/*"/></a>.
+                        </div>
+                        <div id="mprogressbar" class="uk-progress uk-hidden">
+                            <div class="uk-progress-bar" style="width: 0%;">0%</div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="uk-modal-footer uk-text-right">
+                <button type="button" id="movie-upload-btn" class="uk-button uk-button-primary">저장</button>
+            </div>
+        </div>
     </div>
 </div>
 <script>
 
     $('#thumbnail').change(function() {
         $('#kind-form .uk-grid').remove();
+        fileInfoAppend('kind-form', this);
+    })
+
+    $('#movie').change(function() {
+        $('#movie-form .uk-grid').remove();
+        fileInfoAppend('movie-form', this);
+    })
+
+    function fileInfoAppend(form_id, _this) {
         // <![CDATA[
-        for(var i=0; i<$(this)[0].files.length; i++) {
-            var file = $(this)[0].files[i];
+        for(var i=0; i<$(_this)[0].files.length; i++) {
+            var file = $(_this)[0].files[i];
             var name = file.name;
             var size = file.size;
             var html = [];
@@ -164,25 +209,84 @@
             html.push('<div class="uk-width-1-2">'+name+'</div>');
             html.push('<div class="uk-width-1-2 uk-text-right">'+size+'</div>');
             html.push('</div>');
-            $('#kind-form').append(html.join(''));
+            $('#'+form_id).append(html.join(''));
         }
         // ]]>
-    })
+    }
+
 
     $('#kind-upload-btn').click(function() {
-        var progressbar = $("#progressbar");
-        var formData = new FormData($('#kind-form')[0]);
-        var bar         = progressbar.find('.uk-progress-bar');
-        var star = $('input[name=star]').val();
-        var flag = true;
-        if(Number(star) > 5) {
-            $.alert("평점은 5이하로 작성해주세요");
-            flag = false;
-        }
 
-        if(flag) {
+        if(confirm('저장하시겠습니까?')) {
+            var progressbar = $("#progressbar");
+            var formData = new FormData($('#kind-form')[0]);
+            var bar         = progressbar.find('.uk-progress-bar');
+            var star = $('input[name=star]').val();
+            var flag = true;
+            if(Number(star) > 5) {
+                $.alert("평점은 5이하로 작성해주세요");
+                flag = false;
+            }
+
+            if(flag) {
+                $.ajax({
+                    url:'/admin/kindUP',
+                    data:formData,
+                    type:'post',
+                    processData:false,
+                    contentType:false,
+                    beforeSend:function(xhr, setting) {
+                        bar.css("width", "0%").text("0%");
+                        progressbar.removeClass("uk-hidden");
+                    }, error:function(xhr, status, error) {
+                        $.alert(error)
+                    }, success: function(data) {
+                        bar.css("width", "100%").text("100%");
+
+                        setTimeout(function(){
+                            progressbar.addClass("uk-hidden");
+                        }, 250);
+
+                        $('#kind-form').find('input').val("");
+
+                        $('#kind').kindAppend(data);
+                        $('.uk-modal').hide();
+                        $('.uk-modal-page').css('overflow', 'auto');
+                    }, xhr: function () {
+                        var xhr = new window.XMLHttpRequest();
+                        console.log(1);
+                        bar.css("width", '0%').text('0%');
+                        xhr.upload.addEventListener("progress", function (evt) {
+                            var percentComplete = evt.loaded / evt.total;
+                            bar.css("width", percentComplete * 100 + '%').text(percentComplete * 100 + '%');
+                            if (percentComplete === 1) {
+                                progressbar.addClass("uk-hidden");
+                            }
+                        }, false);
+
+                        xhr.addEventListener("progress", function (evt) {
+                            if (evt.lengthComputable) {
+                                var percentComplete = evt.loaded / evt.total;
+                                bar.css("width", percentComplete * 100 + '%').text(percentComplete * 100 + '%');
+                            }
+                        }, false);
+                        return xhr;
+                    }
+                })
+            }
+
+        }
+    })
+
+    $('#movie-upload-btn').click(function() {
+
+        if(confirm('저장하시겠습니까?')) {
+            var progressbar = $("#mprogressbar");
+            var formData = new FormData($('#movie-form')[0]);
+            var bar         = progressbar.find('.uk-progress-bar');
+
             $.ajax({
-                url:'/admin/kindUP',
+                url:'/admin/movieUP',
                 data:formData,
                 type:'post',
                 processData:false,
@@ -199,8 +303,11 @@
                         progressbar.addClass("uk-hidden");
                     }, 250);
 
-                    $('#kind-form').find('input').val("");
-                    $.alert(data)
+                    $('#movie-form').find('input').val("");
+
+                    $('#movie').kindAppend(data);
+                    $('.uk-modal').hide();
+                    $('.uk-modal-page').css('overflow', 'auto');
                 }, xhr: function () {
                     var xhr = new window.XMLHttpRequest();
                     console.log(1);
@@ -223,16 +330,19 @@
                 }
             })
         }
+
     })
 
-    $('#kind tr').click(function() {
+    $(document).on('click', '#kind tr', function() {
         var video_kind_seq = $(this).find('td:eq(0)').text().trim(" ");
+        $('#movie-modal').find('#video_kind_seq').val(video_kind_seq);
         $.ajax({
             url:'/admin/findMovie/' + video_kind_seq,
             type:'post',
             dataType:'json',
             async:false,
             success:function(data) {
+
                 $('#movies').empty();
                 var table = [];
                 $.each(data, function(i) {
@@ -259,8 +369,36 @@
 
     $(document).on('click', '.kind-del-btn', function() {
         var video_kind_seq = $(this).attr('data-video-kind-seq');
-        alert(video_kind_seq);
+        var _this = $(this);
+        if(confirm("삭제하시겠습니까?")) {
+            $.ajax({
+                url:'/admin/kindDel/'+video_kind_seq,
+                type:'post',
+                success:function(data) {
+                    _this.closest('tr').remove();
+                }, error:function(xhr, status, error) {
+                    alert(error);
+                }
+            })
+        }
     })
+
+
+    $.fn.kindAppend = function(data) {
+        var table = "";
+
+
+        table += '<tr>';
+            table += '<td class="uk-text-center" width="10%">'+data.video_kind_seq+'</td>';
+            table += '<td  width="30%">'+data.title1+'</td>';
+            table += '<td  width="10%" class="uk-text-center">'+data.title2+'</td>';
+            table += '<td  width="10%" class="uk-text-center">'+data.country+'</td>';
+            table += '<td  width="20%" >'+data.genre+'</td>';
+            table += '<td  width="10%" class="uk-text-center">'+data.flag+'</td>';
+            table += '<td align="right"><button class="uk-button uk-button-danger kind-del-btn" data-video-kind-seq="'+data.video_kind_seq+'">삭제</button></td>';
+        table += '</tr>';
+        $(this).prepend(table);
+    }
 </script>
 </body>
 </html>

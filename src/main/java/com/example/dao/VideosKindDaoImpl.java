@@ -40,6 +40,16 @@ public class VideosKindDaoImpl implements VideosKindDao {
         return this.videosKindRepository.findByFlag();
     }
 
+    @Override
+    public void save(VideosKindEntity videosKindEntity) {
+        this.videosKindRepository.save(videosKindEntity);
+    }
+
+    @Override
+    public void delete(int video_kind_seq) {
+        this.videosKindRepository.delete(video_kind_seq);
+    }
+
     public Sort sort(String column) {
         return new Sort(Sort.Direction.ASC, new String[]{column});
     }

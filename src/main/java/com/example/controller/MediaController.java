@@ -44,6 +44,7 @@ public class MediaController {
         try {
             videoLogEntity = this.videoLogService.findMaxDateByVideoKindSeq(video_kind_seq);
         } catch(Exception e) {
+            e.printStackTrace();
             System.out.println("result empty!");
         }
         model.addAttribute("videos", videosEntities);

@@ -51,7 +51,7 @@ public class ViewerController {
     @Transactional(readOnly = true)
     public HttpEntity<byte[]> imageView(@PathVariable("video_seq")Integer video_seq, HttpServletRequest req, HttpServletResponse res) {
         VideosEntity videosEntity = this.videosService.findOne(video_seq);
-        String filePath = "c:"+videosEntity.getFile_path() + "thumbnail/" + videosEntity.getThumbnail();
+        String filePath = env.getProperty("video.real.path")+videosEntity.getFile_path() + "thumbnail/" + videosEntity.getThumbnail();
         File file = new File(filePath);
         byte[] imageBytes = null;
         String mimeType = "";
@@ -63,7 +63,7 @@ public class ViewerController {
             imageBytes = IOUtils.toByteArray(fis);
         } catch (FileNotFoundException e) {
             VideosKindEntity videosKindEntity = videosKindService.findOne(videosEntity.getVideo_kind_seq());
-            filePath = "c:"+videosKindEntity.getCover_path()+ videosKindEntity.getCover_name();
+            filePath = env.getProperty("video.real.path")+videosKindEntity.getCover_path()+ videosKindEntity.getCover_name();
             file = new File(filePath);
             System.out.println("cover Image load !!!");
             System.out.println(filePath);
@@ -91,7 +91,7 @@ public class ViewerController {
     @Transactional(readOnly = true)
     public HttpEntity<byte[]> coverView(@PathVariable("video_kind_seq")Integer video_kind_seq, HttpServletRequest req, HttpServletResponse res) {
         VideosKindEntity videosKindEntity = this.videosKindService.findOne(video_kind_seq);
-        String filePath = "c:"+videosKindEntity.getCover_path() + videosKindEntity.getCover_name();
+        String filePath = env.getProperty("video.real.path")+videosKindEntity.getCover_path() + videosKindEntity.getCover_name();
         File file = new File(filePath);
         byte[] imageBytes = null;
         String mimeType = "";
@@ -119,7 +119,7 @@ public class ViewerController {
     public String video(@PathVariable("video_seq")Integer video_seq, HttpServletResponse res, HttpServletRequest req) {
         VideosEntity videosEntity = this.videosService.findOne(video_seq);
         String temp = env.getProperty("video.temp.path");
-        String realPath = "c:"+videosEntity.getFile_path()+videosEntity.getFile_name();
+        String realPath = env.getProperty("video.real.path")+videosEntity.getFile_path()+videosEntity.getFile_name();
         File file = new File(realPath);
 
         String uuid = UUID.randomUUID().toString();
@@ -143,5 +143,9 @@ public class ViewerController {
         } catch (IOException e) {
             //log the exception
         }
+    }
+
+    public static String debug(String path) {
+        return "c:" + path;
     }
 }

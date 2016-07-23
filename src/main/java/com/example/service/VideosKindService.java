@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.entity.VideosKindEntity;
 import org.springframework.data.repository.query.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,4 +15,7 @@ public interface VideosKindService {
     public List<VideosKindEntity> findSearch(String text);
     public List<VideosKindEntity> findGenre(String genre);
     public List<VideosKindEntity> findByFlag();
+    public void save(VideosKindEntity videosKindEntity);
+    public String kindUp(VideosKindEntity videosKindEntity, MultipartFile multipartFile);
+    public void delete(int video_kind_seq);
 }

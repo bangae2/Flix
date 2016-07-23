@@ -7,9 +7,9 @@ import java.util.List;
  * Created by bangae1 on 2016-06-27.
  */
 @Entity
-@Table(name = "video_kind", schema = "dev", catalog = "")
+@Table(name = "video_kind", schema = "dev")
 public class VideosKindEntity {
-    private int video_kind_seq;
+    private int video_kind_seq = 0;
     private String cover_name;
     private String cover_path;
     private String actor;
@@ -24,7 +24,7 @@ public class VideosKindEntity {
 
     @Id
     @Column(name = "video_kind_seq")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getVideo_kind_seq() {
         return video_kind_seq;
     }
