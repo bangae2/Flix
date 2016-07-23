@@ -6,7 +6,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
+import java.io.*;
 
 /**
  * Created by bangae1 on 2016-07-16.
@@ -18,13 +18,36 @@ import java.io.File;
 public class FileWrtier {
 
     public static void main(String[] args) {
-        String img = "/attach/images/cover/";
+        String path = "/home/bangae1/IdeaProjects/Flix/build/resources/main/static/videos/";
+        String oriFile ="/home/bangae1/Downloads/SampleVideo_1280x720_10mb.mp4";
+        File file = new File(oriFile);
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
 
-
-        String path = img.substring(0, img.lastIndexOf("/"));
-        System.out.println(path);
-        path = path.substring(0, path.lastIndexOf("/"));
-        System.out.println(path);
+        try {
+            fis = new FileInputStream(oriFile);
+            fos = new FileOutputStream(new File(path + "123.mp4"));
+            byte[] b = new byte[1024];
+            int s = 0;
+            while((s = fis.read(b)) != 0) {
+                fos.write(b,0,s);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if(fis != null) try {
+                fis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(fos != null) try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

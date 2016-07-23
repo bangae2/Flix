@@ -13,4 +13,6 @@ public interface VideosDao {
     public List<VideosEntity> findSearch(String text);
     public List<VideosEntity> findGenre(String genre);
     public List<VideosEntity> findAllByVideoKindSeq(int video_kind_seq);
+    public void save(VideosEntity videosEntity);
+    public void delete(int video_seq);
 }

@@ -21,12 +21,13 @@ public class VideosEntity {
     private String file_name;
     private String file_path;
     private String thumbnail;
+    private List<VideoLogEntity> videoLogEntities;
 
     public VideosEntity() {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="video_seq")
     public int getVideo_seq() {
         return video_seq;
@@ -107,6 +108,15 @@ public class VideosEntity {
 
     public void setReg_date(String reg_date) {
         this.reg_date = reg_date;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "videosEntity")
+    public List<VideoLogEntity> getVideoLogEntities() {
+        return videoLogEntities;
+    }
+
+    public void setVideoLogEntities(List<VideoLogEntity> videoLogEntities) {
+        this.videoLogEntities = videoLogEntities;
     }
 
     @Override

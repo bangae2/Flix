@@ -280,11 +280,8 @@
         $('#watchMeBtn').click(function() {
             var video_seq = $(this).attr('data-video-seq');
             var url = $.play(video_seq);
-//            $('.video-fade #video').attr('src', url);
             $('.video-fade').slideDown('slow');
             $('.video-btn-group').show();
-            player.src({"type":"video/mp4", "src":url});
-            player.play()
 
             /*footer 숨기기*/
             $('footer').hide();
@@ -299,14 +296,13 @@
 
         /* 플레이 리스트 다른영상 선택시*/
         $('.play-list-menu li').click(function() {
+            player.pause();
             $('.play-list-menu li i').remove();
             $('.play-list-menu li').removeClass('active');
             $(this).addClass('active');
             $(this).prepend('<i class="fa fa-play-circle-o" aria-hidden="true" style="padding-left:5px;"/>');
             var video_seq = $(this).attr('data-video-seq');
             var url = $.play(video_seq);
-            player.src({"type":"video/mp4", "src":url});
-            player.play()
 
             /* 로그 기록 */
             var video_kind_seq = $('#video_kind_seq').val();
@@ -315,20 +311,26 @@
 
         /* 동영상 플레이 function*/
         $.play = function(video_seq) {
+
             var url;
             $.ajax({
                 url:'/viewer/video/'+video_seq,
                 type:'post',
-                async:false,
+//                async:false,
                 success:function(data) {
                     url = data;
+
+                    $('.loading-content').hide();
+                    player.src({"type":"video/mp4", "src":url});
+                    player.play()
                 }, error:function(xhr, status, error) {
                     console.log(error);
+                }, beforeSend:function() {
+                    $('.loading-content').show();
                 }
             })
             return url;
         }
-
         /*로그 기록*/
         $.logSave = function(video_seq, video_kind_seq) {
             $.ajax({
@@ -342,6 +344,8 @@
             })
         }
 
+
+        var nextMovieShowInterval;
         /*비디오 이벤트 설정*/
         $.videoEventSetting = function(pla) {
             pla.off('ended').on('ended', function() {
@@ -362,7 +366,7 @@
 
             /*동영상 준비 완료 이벤트*/
             pla.off('loadstart').on('loadstart', function() {
-                timeupdate(pla);
+                nextMovieShowInterval = setInterval(timeupdate(pla), 2000);
             })
         }
 
@@ -372,17 +376,19 @@
             pla.on('timeupdate', function() {
                 var duration = Math.floor(this.duration());
                 var current = Math.floor(this.currentTime());
-                // <![CDATA[
-                if((duration - 10) <= current) {
-                    $('.next-movie-text span').text(duration - current);
-                    if(timeupdateCount == 0) {
-                        alert(duration);
-                        nextMovieShow();
-                    }
-                    timeupdateCount++;
+                if(current != 0) {
+                    window.clearInterval(nextMovieShowInterval);
+                    // <![CDATA[
+                    if((duration - 10) <= current) {
+                        $('.next-movie-text span').text(duration - current);
+                        if(timeupdateCount == 0) {
+                            nextMovieShow();
+                        }
+                        timeupdateCount++;
 
+                    }
+                    // ]]>
                 }
-                // ]]>
             })
         }
 

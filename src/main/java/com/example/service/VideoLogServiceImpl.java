@@ -21,7 +21,7 @@ public class VideoLogServiceImpl implements VideoLogService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public VideoLogEntity findMaxDateByVideoKindSeq(int video_kind_seq) {
         return this.videoLogDao.findMaxDateByVideoKindSeq(video_kind_seq);
     }

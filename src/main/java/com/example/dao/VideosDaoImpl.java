@@ -42,6 +42,16 @@ public class VideosDaoImpl implements VideosDao {
         return this.videosRepository.findAllByVideoKindSeq(video_kind_seq);
     }
 
+    @Override
+    public void save(VideosEntity videosEntity) {
+        this.videosRepository.save(videosEntity);
+    }
+
+    @Override
+    public void delete(int video_seq) {
+        this.videosRepository.delete(video_seq);
+    }
+
     public Sort title_sort() {
         return new Sort(Sort.Direction.ASC, "title3");
     }

@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.config.HibernateProxyTypeAdapter;
+import com.example.entity.VideoLogEntity;
 import com.example.entity.VideosEntity;
 import com.example.entity.VideosKindEntity;
 import com.example.service.VideosKindService;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
-import java.io.File;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -48,6 +49,9 @@ public class AdminController {
     @ResponseBody
     public String findKind(Model model, @PathVariable("video_kind_seq")int video_kind_seq) {
         List<VideosEntity> lists = this.videosService.findAllByVideoKindSeq(video_kind_seq);
+        for(VideosEntity ve : lists) {
+            ve.setVideoLogEntities(null);
+        }
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
         Gson gson = gsonBuilder.create();
@@ -68,19 +72,51 @@ public class AdminController {
         return "";
     }
 
+    @RequestMapping(value = "/movieDel/{video_seq}", method = RequestMethod.POST, produces = "plain/text;charset=utf-8")
+    @ResponseBody
+    public String movieDel(@PathVariable("video_seq")int video_seq) {
+        this.videosService.movieDel(video_seq);
+        return "";
+    }
+
     @RequestMapping(value = "/movieUP", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     @ResponseBody
     public String movieUP(@RequestParam("movie")MultipartFile multipartFile, @ModelAttribute("cmd")VideosEntity videosEntity) {
-        String file_name = multipartFile.getOriginalFilename();
-        videosEntity.setFile_name(file_name);
-//        /attach/BreakingBad1/
-        VideosKindEntity videosKindEntity = videosKindService.findOne(videosEntity.getVideo_kind_seq());
-        String cover_path = videosKindEntity.getCover_path();
-        cover_path = cover_path.substring(0, cover_path.lastIndexOf("/"));
-        cover_path = cover_path.substring(0, cover_path.lastIndexOf("/")+1);
-        videosEntity.setFile_path(cover_path + env.getProperty("video.real.resource.path"));
-        videosEntity.setThumbnail(file_name.substring(0, file_name.lastIndexOf(".")+1)+"jpg");
-        System.out.println(videosEntity.toString());
-        return "";
+        return this.videosService.movieUP(videosEntity, multipartFile);
+    }
+
+    @RequestMapping(value="/thumbnail/{video_kind_seq}", method=RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+    @ResponseBody
+    public String kind_thumbnail(@PathVariable("video_kind_seq")int video_kind_seq) {
+        VideosKindEntity videoKindEntity = this.videosKindService.findOne(video_kind_seq);
+        String coverPath = videoKindEntity.getCover_path();
+        String realPath = env.getProperty("video.real.path");
+        String path = realPath.substring(0, realPath.length() -1)+lastIndexOfLoop(coverPath, "/", 2) + "/";
+        String command = realPath + env.getProperty("video.real.resource.path") + "thumbnailAuto.sh "+path;
+        System.out.println(realPath + env.getProperty("video.real.resource.path") + "thumbnailAuto.sh "+path);
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process process = runtime.exec(command);
+            InputStream is = process.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String line = "";
+            while((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "seuccess";
+    }
+
+    public String lastIndexOfLoop(String str, String targetStr, int index) {
+        String strs = str;
+        int i= 0;
+        while(i < index) {
+            strs = str.substring(0, strs.lastIndexOf(targetStr));
+            i++;
+        }
+        return strs;
     }
 }

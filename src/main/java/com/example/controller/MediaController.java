@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.entity.UsersEntity;
+import com.example.entity.VideoFavEntity;
 import com.example.entity.VideoLogEntity;
 import com.example.entity.VideosEntity;
 import com.example.service.VideoFavService;
@@ -40,17 +41,24 @@ public class MediaController {
     public String mediaList(@PathVariable("video_kind_seq")Integer video_kind_seq, Model model) {
         List<VideosEntity> videosEntities = this.videosService.findAllByVideoKindSeq(video_kind_seq);
         VideoLogEntity videoLogEntity = new VideoLogEntity();
-        videoLogEntity.setVideosEntity(videosEntities.get(0));
+
         try {
             videoLogEntity = this.videoLogService.findMaxDateByVideoKindSeq(video_kind_seq);
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch(NullPointerException e) {
             System.out.println("result empty!");
+            videoLogEntity = new VideoLogEntity();
+            videoLogEntity.setVideosEntity(videosEntities.get(0));
+            System.out.println(videoLogEntity.toString());
         }
         model.addAttribute("videos", videosEntities);
         model.addAttribute("videoKind",this.videosKindService.findOne(video_kind_seq));
         model.addAttribute("videoLog", videoLogEntity);
-        model.addAttribute("videoFav", this.videoFavService.findOne(videoLogEntity.getVideosEntity().getVideo_seq()));
+        try {
+            model.addAttribute("videoFav", this.videoFavService.findOne(videoLogEntity.getVideosEntity().getVideo_seq()));
+        } catch(NullPointerException e) {
+            VideoFavEntity videoFavEntity = new VideoFavEntity();
+            model.addAttribute("videoFav", videoFavEntity);
+        }
         return "pages/media";
     }
 

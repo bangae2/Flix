@@ -21,7 +21,6 @@
             height:500px;
             overflow:auto;
         }
-
     </style>
 </head>
 <body layout:fragment="content">
@@ -125,11 +124,11 @@
             <caption><h2>영화</h2></caption>
             <thead>
             <tr>
-                <th class="uk-text-center" width="10%">SEQ</th>
-                <th class="uk-text-center" width="10%">파일명</th>
-                <th class="uk-text-center" width="20%">파일경로</th>
-                <th class="uk-text-center" width="20%">파일명</th>
-                <th class="uk-text-center" width="20%">썸네일</th>
+                <th class="uk-text-center" style="width:5%">SEQ</th>
+                <th class="uk-text-center" style="width:25%">파일명</th>
+                <th class="uk-text-center" style="width:20%">파일경로</th>
+                <th class="uk-text-center" style="width:10%">제목</th>
+                <th class="uk-text-center" style="width:20%">썸네일</th>
                 <th class="uk-text-center">삭제</th>
             </tr>
             </thead>
@@ -139,11 +138,11 @@
         <table class="uk-table uk-table-striped" id="movies">
             <tbody>
             <tr th:each="movie, index : ${movies}" th:id="@{'movie-'+${index.count}}">
-                <td class="uk-text-center" width="10%" th:text="${movie.video_seq}"></td>
-                <td width="10%" th:text="${movie.file_name}"></td>
-                <td width="20%" th:text="${movie.file_path}"></td>
-                <td width="20%" th:text="${movie.title3}"></td>
-                <td width="20%" th:text="${movie.thumbnail}"></td>
+                <td class="uk-text-center" style="width:5%;" th:text="${movie.video_seq}"></td>
+                <td style="width:25%" th:text="${movie.file_name}"></td>
+                <td style="width:20%" th:text="${movie.file_path}"></td>
+                <td style="width:10%" th:text="${movie.title3}"></td>
+                <td style="width:20%" th:text="${movie.thumbnail}"></td>
                 <td class="uk-text-right"><button class="uk-button uk-button-danger movie-del-btn" th:attr="data-video-seq=${movie.video_seq}">삭제</button></td>
             </tr>
             </tbody>
@@ -239,7 +238,7 @@
                         bar.css("width", "0%").text("0%");
                         progressbar.removeClass("uk-hidden");
                     }, error:function(xhr, status, error) {
-                        $.alert(error)
+                        alert(error);
                     }, success: function(data) {
                         bar.css("width", "100%").text("100%");
 
@@ -295,7 +294,7 @@
                     bar.css("width", "0%").text("0%");
                     progressbar.removeClass("uk-hidden");
                 }, error:function(xhr, status, error) {
-                    $.alert(error)
+                    alert(error);
                 }, success: function(data) {
                     bar.css("width", "100%").text("100%");
 
@@ -305,7 +304,7 @@
 
                     $('#movie-form').find('input').val("");
 
-                    $('#movie').kindAppend(data);
+                    $('#movies').movieAppend(data);
                     $('.uk-modal').hide();
                     $('.uk-modal-page').css('overflow', 'auto');
                 }, xhr: function () {
@@ -347,24 +346,35 @@
                 var table = [];
                 $.each(data, function(i) {
                     table.push('<tr id="movie-'+i+'">');
-                    table.push('    <td style="text-align:center;" width="10%">'+this.video_seq+'</td>');
-                    table.push('    <td  width="10%">'+this.file_name+'</td>');
-                    table.push('    <td  width="20%">'+this.file_path+'</td>');
-                    table.push('    <td  width="20%">'+this.title3+'</td>');
-                    table.push('    <td  width="20%">'+this.thumbnail+'</td>');
+                    table.push('    <td style="text-align:center; width:5%;">'+this.video_seq+'</td>');
+                    table.push('    <td style="width:25%">'+this.file_name+'</td>');
+                    table.push('    <td style="width:20%">'+this.file_path+'</td>');
+                    table.push('    <td style="width:10%">'+this.title3+'</td>');
+                    table.push('    <td style="width:20%">'+this.thumbnail+'</td>');
                     table.push('    <td align="right"><button class="uk-button uk-button-danger movie-del-btn" data-video-seq="'+this.video_seq+'">삭제</button></td>');
                     table.push('</tr>');
                 })
                 $('#movies').html(table.join(''));
             }, error:function(xhr, status, error) {
-                console.log(error);
+                alert(error);
             }
         })
     })
 
     $(document).on('click', '.movie-del-btn', function() {
         var video_seq = $(this).attr('data-video-seq');
-        alert(video_seq);
+        var _this = $(this);
+        if(confirm("삭제하시겠습니까?")) {
+            $.ajax({
+                url:'/admin/movieDel/'+video_seq,
+                type:'post',
+                success:function(data) {
+                    _this.closest('tr').remove();
+                }, error:function(xhr, status, error) {
+                    alert(error);
+                }
+            })
+        }
     })
 
     $(document).on('click', '.kind-del-btn', function() {
@@ -383,7 +393,6 @@
         }
     })
 
-
     $.fn.kindAppend = function(data) {
         var table = "";
 
@@ -399,6 +408,36 @@
         table += '</tr>';
         $(this).prepend(table);
     }
+
+    $.fn.movieAppend = function(data) {
+        var table = "";
+
+        table += '<tr>';
+        table += '<td class="uk-text-center" style="width:5%">'+data.video_seq+'</td>';
+        table += '<td style="width:25%">'+data.file_name+'</td>';
+        table += '<td style="width:20%">'+data.file_path+'</td>';
+        table += '<td style="width:10%">'+data.title3+'</td>';
+        table += '<td style="width:20%">'+data.thumbnail+'</td>';
+        table += '<td class="uk-text-right"><button class="uk-button uk-button-danger movie-del-btn" data-video-seq="'+data.video_seq+'">삭제</button></td>';
+        table += '</tr>';
+        $(this).prepend(table);
+    }
+
+    $(document).on('click', '.thumbnail-btn', function() {
+        var video_kind_seq = $(this).closest('tr').find('td:eq(0)').text().trim();
+        if(confirm("썸네일을 생성하시겠습니까?")) {
+            $.ajax({
+                url:'/admin/thumbnail/'+video_kind_seq,
+                type:'post',
+                success:function(data) {
+                    alert(data);
+                }, error:function(xhr, status, error) {
+                    alert(error);
+                }
+            })
+        }
+
+    })
 </script>
 </body>
 </html>

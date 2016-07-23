@@ -62,7 +62,7 @@ public class VideoLogEntity {
         this.video_kind_seq = video_kind_seq;
     }
 
-    @ManyToOne(cascade =  CascadeType.ALL)
+    @ManyToOne(cascade =  CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "video_seq", referencedColumnName = "video_seq", updatable = false, insertable = false)
     public VideosEntity getVideosEntity() {
         return videosEntity;

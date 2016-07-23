@@ -66,7 +66,6 @@ public class ViewerController {
             filePath = env.getProperty("video.real.path")+videosKindEntity.getCover_path()+ videosKindEntity.getCover_name();
             file = new File(filePath);
             System.out.println("cover Image load !!!");
-            System.out.println(filePath);
             try {
                 mimeType = new MimetypesFileTypeMap().getContentType(file);
                 fis = new FileInputStream(file);
