@@ -36,19 +36,19 @@ public class MainController {
         return "pages/login";
     }
 
-//    @RequestMapping(value="/error", method = RequestMethod.GET)
-//    public String error(Model model) {
-//        return "/error";
-//    }
+    @RequestMapping(value="/error", method = RequestMethod.GET)
+    public String error(Model model) {
+        return "error";
+    }
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String main(Model model) {
         List<VideosKindEntity> lists = this.videosKindService.findByFlag();
         model.addAttribute("videoKinds", lists);
         UsersEntity usersEntity = (UsersEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.addAttribute("videoLogs",videoLogService.findMainAll(usersEntity.getId()));
-
+        model.addAttribute("videoLogs", videoLogService.findMainAll(usersEntity.getId()));
         return "pages/main";
+
     }
 
     @RequestMapping(value="/search/{text}", method = RequestMethod.POST)
