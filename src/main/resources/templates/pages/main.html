@@ -75,13 +75,9 @@
                         <h5 class="uk-panel-title" th:text="@{${videoKind.title1} + '' + ${videoKind.title2}}"></h5>
                         <p>
                             <span class="rating">
-                                <i class="uk-icon-star"></i>
-                                <i class="uk-icon-star"></i>
-                                <i class="uk-icon-star"></i>
-                                <i class="uk-icon-star"></i>
-                                <i class="uk-icon-star"></i>
+                                <i class="uk-icon-star"></i><span th:text="${videoKind.star}"></span>
                             </span>
-                            <span class="uk-float-right">2016</span>
+                            <span class="uk-float-right" th:text="${videoKind.start_date.substring(0, 4)}">2016</span>
                         </p>
                     </div>
                 </div>
