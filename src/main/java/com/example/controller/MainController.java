@@ -1,11 +1,14 @@
 package com.example.controller;
 
+import com.example.entity.UsersEntity;
 import com.example.entity.VideosEntity;
 import com.example.entity.VideosKindEntity;
+import com.example.service.VideoLogService;
 import com.example.service.VideosKindService;
 import com.example.service.VideosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +28,9 @@ public class MainController {
     @Autowired
     private VideosKindService videosKindService;
 
+    @Autowired
+    private VideoLogService videoLogService;
+
     @RequestMapping(value="/login", method = RequestMethod.GET)
     public String index(Model model) {
         return "pages/login";
@@ -38,24 +44,28 @@ public class MainController {
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String main(Model model) {
         List<VideosKindEntity> lists = this.videosKindService.findByFlag();
-        debug(lists);
         model.addAttribute("videoKinds", lists);
+        UsersEntity usersEntity = (UsersEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("videoLogs",videoLogService.findMainAll(usersEntity.getId()));
+
         return "pages/main";
     }
 
     @RequestMapping(value="/search/{text}", method = RequestMethod.POST)
     public String search(@PathVariable("text")String text, Model model) {
         List<VideosKindEntity> lists = this.videosKindService.findSearch(text);
-        debug(lists);
         model.addAttribute("videoKinds", lists);
+        UsersEntity usersEntity = (UsersEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("videoLogs",videoLogService.findMainAll(usersEntity.getId()));
         return "pages/main";
     }
 
     @RequestMapping(value="/menu/{genre}", method = RequestMethod.GET)
     public String menu(@PathVariable("genre")String genre, Model model) {
         List<VideosKindEntity> lists = this.videosKindService.findGenre(genre);
-        debug(lists);
         model.addAttribute("videoKinds", lists);
+        UsersEntity usersEntity = (UsersEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("videoLogs",videoLogService.findMainAll(usersEntity.getId()));
         return "pages/main";
     }
 

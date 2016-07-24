@@ -27,10 +27,32 @@
                     <input class="uk-search-field" type="search" placeholder="Search..."/>
                 </form>
                 <div class="uk-button-group">
-                    <a class="uk-button uk-button-link uk-button-large uk-text-muted" href="signup.html">Sign up</a>
-                    <a class="uk-button uk-button-success uk-button-large uk-margin-left" href="login.html"><i class="uk-icon-lock uk-margin-small-right"></i> Log in</a>
+                    <div class="uk-button-dropdown" aria-haspopup="true" aria-expended="false" aria-expanded="false">
+                        <a class="uk-dropdown-btn uk-button uk-button-link uk-button-large uk-text-muted"  sec:authentication="name"></a>
+                        <div class="uk-dropdown-content uk-dropdown uk-dropdown-bottom" style="top: 40px; left: 0px;">
+                            <ul class="uk-nav uk-nav-dropdown">
+                                <li class="nav-header">USER</li>
+                                <li><a href="/fav/list">플레이리스트</a></li>
+                                <li class="uk-nav-divider"></li>
+                                <li class="nav-header">ADMIN</li>
+                                <li><a href="/admin/kind">영화</a></li>
+                                <li class="uk-nav-divider"></li>
+                                <li><a href="/logout">로그아웃</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <script>
+                $('.uk-dropdown-btn').click(function() {
+                    var display = $('.uk-dropdown-content').css('display');
+                    if(display == 'block') {
+                        $('.uk-dropdown-content').css('display', 'none');
+                    } else {
+                        $('.uk-dropdown-content').css('display', 'block');
+                    }
+                })
+            </script>
             <ul class="uk-nav uk-nav-offcanvas uk-nav-parent-icon" data-uk-nav="data-uk-nav">
                 <li class="uk-active"><a href="/">전체</a></li>
                 <li><a href="#">추천</a></li>

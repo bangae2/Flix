@@ -194,8 +194,6 @@
     <script th:src="@{/js/uikit.js}"></script>
     <script th:src="@{/js/components/grid.js}"></script>
     <script th:src="@{/js/core/nav.min.js}"></script>
-    <script th:src="@{/js/components/lightbox.js}"></script>
-    <script th:src="@{/js/components/slideset.js}"></script>
     <script src="http://vjs.zencdn.net/5.10.7/video.js"></script>
     <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
     <script>
@@ -228,7 +226,6 @@
                 if($('.fa-th-list').attr('class').indexOf('fa-th-list-full') < 0) {
                     $('.fa-th-list').addClass('fa-th-list-full');
                     $('.fa-th-list').on('mouseenter', function() {
-                        console.log('111')
                         $('.fa-th-list').trigger('click');
                     })
                     $('.play-list-menu').on('mouseleave', function() {
@@ -316,10 +313,8 @@
             $.ajax({
                 url:'/viewer/video/'+video_seq,
                 type:'post',
-//                async:false,
                 success:function(data) {
                     url = data;
-
                     $('.loading-content').hide();
                     player.src({"type":"video/mp4", "src":url});
                     player.play()

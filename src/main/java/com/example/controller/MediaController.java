@@ -41,9 +41,9 @@ public class MediaController {
     public String mediaList(@PathVariable("video_kind_seq")Integer video_kind_seq, Model model) {
         List<VideosEntity> videosEntities = this.videosService.findAllByVideoKindSeq(video_kind_seq);
         VideoLogEntity videoLogEntity = new VideoLogEntity();
-
         try {
             videoLogEntity = this.videoLogService.findMaxDateByVideoKindSeq(video_kind_seq);
+            videoLogEntity.getVideosEntity().getVideo_seq();
         } catch(NullPointerException e) {
             System.out.println("result empty!");
             videoLogEntity = new VideoLogEntity();

@@ -5,6 +5,8 @@ import com.example.repository.VideoLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by bangae1 on 2016-07-19.
  */
@@ -24,5 +26,10 @@ public class VideoLogDaoImpl implements VideoLogDao {
 
     public VideoLogEntity findMaxDateByVideoKindSeq(int video_kind_seq) {
         return this.videoLogRepository.findMaxDateByVideoKindSeq(video_kind_seq);
+    }
+
+    @Override
+    public List<VideoLogEntity> findMainAll(String id) {
+        return this.videoLogRepository.findMainAll(id);
     }
 }
