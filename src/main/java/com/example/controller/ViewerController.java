@@ -53,6 +53,7 @@ public class ViewerController {
         VideosEntity videosEntity = this.videosService.findOne(video_seq);
         String filePath = env.getProperty("video.real.path")+videosEntity.getFile_path() + "thumbnail/" + videosEntity.getThumbnail();
         File file = new File(filePath);
+
         byte[] imageBytes = null;
         String mimeType = "";
         FileInputStream fis = null;
@@ -117,21 +118,21 @@ public class ViewerController {
     @Transactional
     public String video(@PathVariable("video_seq")Integer video_seq, HttpServletResponse res, HttpServletRequest req) {
         VideosEntity videosEntity = this.videosService.findOne(video_seq);
-        String temp = env.getProperty("video.temp.path");
-        String realPath = env.getProperty("video.real.path")+videosEntity.getFile_path()+videosEntity.getFile_name();
-        File file = new File(realPath);
-
-        String uuid = UUID.randomUUID().toString();
-        String fileName = file.getName();
-        fileName = fileName.substring(fileName.length() -4);
-        File eFile = new File(temp + uuid + fileName);
-        try {
-            FileUtils.copyFile(file, eFile);
-            VideoRemoveUtil util = new VideoRemoveUtil(temp + uuid + fileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return env.getProperty("video.resource.path") + uuid + fileName;
+//        String temp = env.getProperty("video.temp.path");
+//        String realPath = env.getProperty("video.real.path")+videosEntity.getFile_path()+videosEntity.getFile_name();
+//        File file = new File(realPath);
+//
+//        String uuid = UUID.randomUUID().toString();
+//        String fileName = file.getName();
+//        fileName = fileName.substring(fileName.length() -4);
+//        File eFile = new File(temp + uuid + fileName);
+//        try {
+//            FileUtils.copyFile(file, eFile);
+//            VideoRemoveUtil util = new VideoRemoveUtil(temp + uuid + fileName);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        return videosEntity.getFile_path() + videosEntity.getFile_name();
 
     }
 
