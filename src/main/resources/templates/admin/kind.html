@@ -121,7 +121,7 @@
 
     <div class="movies-header">
         <table class="uk-table uk-table-striped" id="movies-header">
-            <caption><h2>영화</h2></caption>
+            <caption><h2>영화(<span id="movie-title"></span>)</h2></caption>
             <thead>
             <tr>
                 <th class="uk-text-center" style="width:5%">SEQ</th>
@@ -334,6 +334,7 @@
 
     $(document).on('click', '#kind tr', function() {
         var video_kind_seq = $(this).find('td:eq(0)').text().trim(" ");
+        $('#movie-title').text($(this).find('td:eq(1)').text());
         $('#movie-modal').find('#video_kind_seq').val(video_kind_seq);
         $.ajax({
             url:'/admin/findMovie/' + video_kind_seq,

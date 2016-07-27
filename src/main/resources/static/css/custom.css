@@ -137,8 +137,35 @@
     right: 0px;
 }
 
+@media (min-width:0px) {
+    .next-movie img {
+        width:100%;
+        height:45%;
+    }
+}
+
+@media (min-width:720px) {
+    .next-movie img {
+        width:50%;
+        height:45%;
+    }
+}
+
+@media (min-width:960px) {
+    .next-movie img {
+        width:45%;
+        height:45%;
+    }
+}
+
+@media (min-width:1280px) {
+    .next-movie img {
+        width:40%;
+        height:45%;
+    }
+}
+
 .next-movie img {
-    width: 500px;
     height: 100%;
     right: 0;
     position: absolute;

@@ -394,7 +394,20 @@
                 'background-image':'url("/viewer/cover/'+video_kind_seq+'")',
                 'background-size':'100% 100%'
             });
-            $('video').css({'width':'500px', 'height':'300px', 'top':'55px'});
+            var width = $(window).width();
+            var w = "100%";
+            // <![CDATA[
+            if(width > 0 && width < 720) {
+                w = "100%";
+            } else if(width > 720 && width < 960) {
+                w = "50%";
+            } else if(width > 960 && width < 1280) {
+                w = "45%";
+            } else {
+                w = "40%";
+            }
+            // ]]>
+            $('video').css({'width':w, 'height':'45%', 'top':'55px'});
             $('.next-movie').show();
             $('.next-movie img').attr('src', '/viewer/image/'+video_seq);
         }
