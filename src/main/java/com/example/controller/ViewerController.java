@@ -51,7 +51,13 @@ public class ViewerController {
     @Transactional(readOnly = true)
     public HttpEntity<byte[]> imageView(@PathVariable("video_seq")Integer video_seq, HttpServletRequest req, HttpServletResponse res) {
         VideosEntity videosEntity = this.videosService.findOne(video_seq);
-        String filePath = env.getProperty("video.real.path")+videosEntity.getFile_path() + "thumbnail/" + videosEntity.getThumbnail();
+        String filePath = null;
+        if(env.getProperty("debug_local").equals("Y")) {
+            filePath = env.getProperty("video.real.path.debug")+videosEntity.getFile_path() + "thumbnail/" + videosEntity.getThumbnail();
+        } else {
+            filePath = env.getProperty("video.real.path")+videosEntity.getFile_path() + "thumbnail/" + videosEntity.getThumbnail();
+        }
+
         File file = new File(filePath);
 
         byte[] imageBytes = null;
@@ -91,7 +97,12 @@ public class ViewerController {
     @Transactional(readOnly = true)
     public HttpEntity<byte[]> coverView(@PathVariable("video_kind_seq")Integer video_kind_seq, HttpServletRequest req, HttpServletResponse res) {
         VideosKindEntity videosKindEntity = this.videosKindService.findOne(video_kind_seq);
-        String filePath = env.getProperty("video.real.path")+videosKindEntity.getCover_path() + videosKindEntity.getCover_name();
+        String filePath = null;
+        if(env.getProperty("debug_local").equals("Y")) {
+            filePath = env.getProperty("video.real.path.debug")+videosKindEntity.getCover_path() + videosKindEntity.getCover_name();
+        } else {
+            filePath = env.getProperty("video.real.path")+videosKindEntity.getCover_path() + videosKindEntity.getCover_name();
+        }
         File file = new File(filePath);
         byte[] imageBytes = null;
         String mimeType = "";
@@ -145,7 +156,4 @@ public class ViewerController {
         }
     }
 
-    public static String debug(String path) {
-        return "c:" + path;
-    }
 }

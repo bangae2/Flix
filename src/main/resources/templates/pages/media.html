@@ -289,6 +289,17 @@
             /* 로그 기록 */
             var video_kind_seq = $('#video_kind_seq').val();
             $.logSave(video_seq, video_kind_seq);
+
+            $('video').mouseenter(function() {
+                $(document).on('keydown',function(e) {
+                    if(e.which == 39)player.currentTime(player.currentTime()  + 5);
+                    if(e.which == 37)player.currentTime(player.currentTime()  - 5);
+                })
+            })
+
+            $('video').mouseleave(function() {
+                $(document).off("keydown");
+            })
         })
 
         /* 플레이 리스트 다른영상 선택시*/

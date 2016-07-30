@@ -2,6 +2,7 @@ package com.example;
 
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +21,7 @@ import java.util.Date;
 public class FileWrtier {
 
     public static void main(String[] args) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:SS");
-        System.out.println(sdf.format(new Date()));
+        System.out.printf(new ShaPasswordEncoder().encodePassword("fpdlwms1", ""));
     }
 
 }
