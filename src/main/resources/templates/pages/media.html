@@ -277,6 +277,7 @@
         $('#watchMeBtn').click(function() {
             var video_seq = $(this).attr('data-video-seq');
             var url = $.play(video_seq);
+            $('.play-list-menu').find('li[data-video-seq='+video_seq+']').trigger('click');
             $('.video-fade').slideDown('slow');
             $('.video-btn-group').show();
 
@@ -289,6 +290,8 @@
             /* 로그 기록 */
             var video_kind_seq = $('#video_kind_seq').val();
             $.logSave(video_seq, video_kind_seq);
+
+
 
             $('video').mouseenter(function() {
                 $(document).on('keydown',function(e) {
