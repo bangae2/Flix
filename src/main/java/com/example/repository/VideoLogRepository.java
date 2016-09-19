@@ -23,6 +23,8 @@ public interface VideoLogRepository extends JpaRepository<VideoLogEntity, String
     @Query(value = "select * from video_log a inner join (select max(insert_date) as ins_date from video_log) b on a.insert_date = b.ins_date and a.video_kind_seq = :video_kind_seq", nativeQuery = true)
     public VideoLogEntity findMaxDateByVideoKindSeq(@Param("video_kind_seq")int video_kind_seq);
 
-    @Query(value = "select aa.video_seq, aa.id, aa.insert_date, aa.video_kind_seq from (select a.*, (select @ROW \\:= @ROW + 1)as rownum from video_log as a, (select @ROW \\:= 0) as b) as aa where aa.rownum <= 12 and aa.id = :id order by aa.insert_date desc", nativeQuery = true)
+
+//    @Query(value = "select aa.video_seq, aa.id, aa.insert_date, aa.video_kind_seq from (select a.*, (select @ROW \\:= @ROW + 1)as rownum from video_log as a, (select @ROW \\:= 0) as b) as aa where aa.rownum <= 12 and aa.id = :id order by aa.insert_date desc", nativeQuery = true)
+    @Query(value = "SELECT    aa.video_seq,    aa.id,    aa.insert_date,    aa.video_kind_seq    FROM (SELECT @ROW \\:= @ROW + 1 AS rownum, a.* FROM video_log AS a, (SELECT @ROW \\:= 0) R where a.id = :id order by a.insert_date desc) AS aa    WHERE aa.rownum <= 12", nativeQuery = true)
     public List<VideoLogEntity> findMainAll(@Param("id")String id);
 }
